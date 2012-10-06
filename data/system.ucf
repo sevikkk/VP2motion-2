@@ -95,3 +95,22 @@ Net SDRAM_DQ<29> LOC=J27;
 Net SDRAM_DQ<30> LOC=J28;
 Net SDRAM_DQ<31> LOC=K27;
 
+Net PHY_tx_clk LOC=AD5;
+Net PHY_rx_clk LOC=AB7;
+Net PHY_crs LOC=AE5;
+Net PHY_dv LOC=AC7;
+Net PHY_rx_data<0> LOC=AC6;
+Net PHY_rx_data<1> LOC=AD4;
+Net PHY_rx_data<2> LOC=AD3;
+Net PHY_rx_data<3> LOC=AB10;
+Net PHY_col LOC=AB5;
+Net PHY_rx_er LOC=AB8;
+Net PHY_tx_er LOC=AB9;
+Net PHY_tx_en LOC=AD6;
+Net PHY_tx_data<0> LOC=AD7;
+Net PHY_tx_data<1> LOC=AD8;
+Net PHY_tx_data<2> LOC=AE2;
+Net PHY_tx_data<3> LOC=AF2;
+Net PHY_mdc LOC=AE1;
+Net PHY_mdio LOC=AC3;
+
