@@ -1,0 +1,14 @@
+-p
+xc2vp50ff1152-6
+-lang
+vhdl
+-pe
+ppc405_0
+TestApp_Memory/executable.elf
+-mixed
+yes
+-s
+mti
+-m
+behavioral
+system.mhs

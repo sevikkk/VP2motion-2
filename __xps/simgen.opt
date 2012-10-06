@@ -1,0 +1,1 @@
+ -p virtex2p -lang vhdl   TestApp_Memory/executable.elf -s mti
