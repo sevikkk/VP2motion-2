@@ -1,0 +1,14 @@
+-batch 
+-create motion 
+-ver 1.00.a 
+-dir "/home/seva/src/xc2p_pe1" 
+-lang verilog 
+-bus plbv46 s 
+-rst 
+-isc 3 
+-intrn 4 5 
+-reg 32 
+-mem 1 
+-xps 
+-ise 
+-driver 

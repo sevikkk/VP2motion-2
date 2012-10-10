@@ -1,0 +1,12 @@
+run
+-opt_level 2
+-opt_mode speed
+-ifmt mixed
+-ifn "/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/devl/synthesis/motion_xst.prj"
+-top motion
+-p virtex5
+-ofn "/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/devl/synthesis/motion_xst.ngc"
+-iobuf NO
+-rtlview YES
+-hierarchy_separator /
+-work_lib motion_v1_00_a
