@@ -113,4 +113,5 @@ Net PHY_tx_data<2> LOC=AE2;
 Net PHY_tx_data<3> LOC=AF2;
 Net PHY_mdc LOC=AE1;
 Net PHY_mdio LOC=AC3;
+Net PHY_rst_n LOC=AD1;
 

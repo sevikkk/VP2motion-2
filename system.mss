@@ -3,11 +3,32 @@
 
 
 BEGIN OS
- PARAMETER OS_NAME = standalone
- PARAMETER OS_VER = 2.00.a
+ PARAMETER OS_NAME = xilkernel
+ PARAMETER OS_VER = 4.00.a
  PARAMETER PROC_INSTANCE = ppc405_0
- PARAMETER STDIN = RS232
- PARAMETER STDOUT = RS232
+ PARAMETER sysintc_spec = xps_intc_0
+ PARAMETER stdout = RS232
+ PARAMETER stdin = RS232
+ PARAMETER config_debug_support = true
+ PARAMETER debug_mon = true
+ PARAMETER enhanced_features = true
+ PARAMETER config_yield = true
+ PARAMETER config_kill = true
+ PARAMETER systmr_dev = xps_timer_0
+ PARAMETER config_msgq = true
+ PARAMETER config_sema = true
+ PARAMETER config_named_sema = true
+ PARAMETER config_time = true
+ PARAMETER use_malloc = true
+ PARAMETER pthread_stack_size = 16384
+ PARAMETER msgq_capacity = 100
+ PARAMETER num_msgqs = 100
+ PARAMETER max_sem_waitq = 100
+ PARAMETER max_sem = 25
+ PARAMETER max_tmrs = 100
+ PARAMETER max_pthreads = 100
+ PARAMETER systmr_interval = 1
+ PARAMETER static_pthread_table = ((main_thread,1))
 END
 
 
@@ -87,4 +108,19 @@ BEGIN DRIVER
  PARAMETER HW_INSTANCE = xps_ethernetlite_0
 END
 
+BEGIN DRIVER
+ PARAMETER DRIVER_NAME = tmrctr
+ PARAMETER DRIVER_VER = 1.10.b
+ PARAMETER HW_INSTANCE = xps_timer_0
+END
+
+
+BEGIN LIBRARY
+ PARAMETER LIBRARY_NAME = lwip130
+ PARAMETER LIBRARY_VER = 1.00.a
+ PARAMETER PROC_INSTANCE = ppc405_0
+ PARAMETER api_mode = SOCKET_API
+ PARAMETER dhcp_does_arp_check = true
+ PARAMETER lwip_dhcp = true
+END
 

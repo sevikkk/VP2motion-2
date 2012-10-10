@@ -27,34 +27,12 @@ EnableParTimingError: 1
 EnableResetOptimization: 0
 ShowLicenseDialog: 1
 Processor: ppc405_0
-BootLoop: 0
+BootLoop: 1
 XmdStub: 0
 SwProj: TestApp_Memory
 Processor: ppc405_0
 Executable: TestApp_Memory/executable.elf
 Source: TestApp_Memory/src/TestApp_Memory.c
-DefaultInit: EXECUTABLE
-InitBram: 1
-Active: 1
-CompilerOptLevel: 2
-GlobPtrOpt: 0
-DebugSym: 1
-ProfileFlag: 0
-ProgStart: 
-StackSize: 
-HeapSize: 
-LinkerScript: TestApp_Memory/src/TestApp_Memory_LinkScr.ld
-ProgCCFlags: 
-CompileInXps: 1
-NonXpsApp: 0
-SwProj: TestApp_Peripheral
-Processor: ppc405_0
-Executable: TestApp_Peripheral/executable.elf
-Source: TestApp_Peripheral/src/TestApp_Peripheral.c
-Source: TestApp_Peripheral/src/xintc_tapp_example.c
-Source: TestApp_Peripheral/src/xgpio_tapp_example.c
-Header: TestApp_Peripheral/src/intc_header.h
-Header: TestApp_Peripheral/src/gpio_header.h
 DefaultInit: EXECUTABLE
 InitBram: 0
 Active: 1
@@ -62,10 +40,11 @@ CompilerOptLevel: 2
 GlobPtrOpt: 0
 DebugSym: 1
 ProfileFlag: 0
+LFlags: -llwip4
 ProgStart: 
 StackSize: 
 HeapSize: 
-LinkerScript: TestApp_Peripheral/src/TestApp_Peripheral_LinkScr.ld
+LinkerScript: TestApp_Memory/src/TestApp_Memory_LinkScr.ld
 ProgCCFlags: 
 CompileInXps: 1
 NonXpsApp: 0

@@ -163,24 +163,6 @@ TestApp_Memory_programclean:
 	rm -f $(TESTAPP_MEMORY_OUTPUT) 
 
 #################################################################
-# SOFTWARE APPLICATION TESTAPP_PERIPHERAL
-#################################################################
-
-TestApp_Peripheral_program: $(TESTAPP_PERIPHERAL_OUTPUT) 
-
-$(TESTAPP_PERIPHERAL_OUTPUT) : $(TESTAPP_PERIPHERAL_SOURCES) $(TESTAPP_PERIPHERAL_HEADERS) $(TESTAPP_PERIPHERAL_LINKER_SCRIPT) \
-                    $(LIBRARIES) __xps/testapp_peripheral_compiler.opt
-	@mkdir -p $(TESTAPP_PERIPHERAL_OUTPUT_DIR) 
-	$(TESTAPP_PERIPHERAL_CC) $(TESTAPP_PERIPHERAL_CC_OPT) $(TESTAPP_PERIPHERAL_SOURCES) -o $(TESTAPP_PERIPHERAL_OUTPUT) \
-	$(TESTAPP_PERIPHERAL_OTHER_CC_FLAGS) $(TESTAPP_PERIPHERAL_INCLUDES) $(TESTAPP_PERIPHERAL_LIBPATH) \
-	$(TESTAPP_PERIPHERAL_CFLAGS) $(TESTAPP_PERIPHERAL_LFLAGS) 
-	$(TESTAPP_PERIPHERAL_CC_SIZE) $(TESTAPP_PERIPHERAL_OUTPUT) 
-	@echo ""
-
-TestApp_Peripheral_programclean:
-	rm -f $(TESTAPP_PERIPHERAL_OUTPUT) 
-
-#################################################################
 # BOOTLOOP ELF FILES
 #################################################################
 
@@ -233,11 +215,11 @@ $(DOWNLOAD_BIT): $(SYSTEM_BIT) $(BRAMINIT_ELF_FILES) __xps/bitinit.opt
 	-bt $(SYSTEM_BIT) -o $(DOWNLOAD_BIT)
 	@rm -f $(SYSTEM)_bd.bmm
 
-$(SYSTEM_ACE): $(DOWNLOAD_BIT) $(TESTAPP_MEMORY_OUTPUT) $(TESTAPP_PERIPHERAL_OUTPUT) 
+$(SYSTEM_ACE): $(DOWNLOAD_BIT) $(TESTAPP_MEMORY_OUTPUT) 
 	@echo "*********************************************"
 	@echo "Creating system ace file"
 	@echo "*********************************************"
-	xmd -tcl genace.tcl -jprog -hw $(DOWNLOAD_BIT) -elf $(TESTAPP_MEMORY_OUTPUT) $(TESTAPP_PERIPHERAL_OUTPUT)  -target ppc_hw  -ace $(SYSTEM_ACE)
+	xmd -tcl genace.tcl -jprog -hw $(DOWNLOAD_BIT) -elf $(TESTAPP_MEMORY_OUTPUT)  -target ppc_hw  -ace $(SYSTEM_ACE)
 
 #################################################################
 # SIMULATION FLOW

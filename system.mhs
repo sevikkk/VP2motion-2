@@ -83,7 +83,7 @@ BEGIN xps_bram_if_cntlr
  PARAMETER INSTANCE = xps_bram_if_cntlr_1
  PARAMETER HW_VER = 1.00.a
  PARAMETER C_SPLB_NATIVE_DWIDTH = 64
- PARAMETER C_BASEADDR = 0xffff0000
+ PARAMETER C_BASEADDR = 0xfffe0000
  PARAMETER C_HIGHADDR = 0xffffffff
  BUS_INTERFACE SPLB = plb0
  BUS_INTERFACE PORTA = xps_bram_if_cntlr_1_port
@@ -157,7 +157,7 @@ BEGIN mpmc
  PORT MPMC_Clk0 = sys_clk_s
  PORT MPMC_Clk90 = SDR_SDRAM_CUSTOM_mpmc_clk_90_s
  PORT MPMC_Rst = sys_periph_reset
- PORT MPMC_Clk_Mem = dcm_clk_s
+ PORT MPMC_Clk_Mem = sys_clk_s
 END
 
 BEGIN plb_v46
@@ -214,12 +214,13 @@ BEGIN xps_intc
  PARAMETER C_HIGHADDR = 0x8180ffff
  BUS_INTERFACE SPLB = plb0
  PORT Irq = EICC405EXTINPUTIRQ
- PORT Intr = RS232_Interrupt&xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt
+ PORT Intr = RS232_Interrupt&xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt&xps_timer_0_Interrupt
 END
 
 BEGIN xps_timebase_wdt
  PARAMETER INSTANCE = xps_timebase_wdt_0
  PARAMETER HW_VER = 1.00.b
+ PARAMETER C_WDT_ENABLE_ONCE = 0
  PARAMETER C_BASEADDR = 0x83a00000
  PARAMETER C_HIGHADDR = 0x83a0ffff
  BUS_INTERFACE SPLB = plb0
@@ -245,5 +246,14 @@ BEGIN xps_ethernetlite
  PORT PHY_crs = xps_ethernetlite_0_PHY_crs
  PORT PHY_rx_clk = xps_ethernetlite_0_PHY_rx_clk
  PORT PHY_tx_clk = xps_ethernetlite_0_PHY_tx_clk
+END
+
+BEGIN xps_timer
+ PARAMETER INSTANCE = xps_timer_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x83c00000
+ PARAMETER C_HIGHADDR = 0x83c0ffff
+ BUS_INTERFACE SPLB = plb0
+ PORT Interrupt = xps_timer_0_Interrupt
 END
 

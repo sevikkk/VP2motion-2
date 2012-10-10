@@ -1,1 +1,1 @@
- -p virtex2p -lang vhdl   TestApp_Memory/executable.elf -s mti
+ -p virtex2p -lang vhdl   $(PPC405_0_BOOTLOOP)  -s mti

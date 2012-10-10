@@ -1,5 +1,5 @@
 ppc405_0
-TESTAPP_PERIPHERAL_SOURCES = TestApp_Peripheral/src/TestApp_Peripheral.c TestApp_Peripheral/src/xintc_tapp_example.c TestApp_Peripheral/src/xgpio_tapp_example.c 
+TESTAPP_PERIPHERAL_SOURCES = TestApp_Peripheral/src/TestApp_Peripheral.c TestApp_Peripheral/src/xintc_tapp_example.c TestApp_Peripheral/src/xgpio_tapp_example.c TestApp_Peripheral/src/xemaclite_intr_tapp_example.c TestApp_Peripheral/src/xemaclite_selftest_example.c TestApp_Peripheral/src/xtmrctr_intr_example.c TestApp_Peripheral/src/xtmrctr_selftest_example.c TestApp_Peripheral/src/xwdttb_intr_example.c TestApp_Peripheral/src/xwdttb_selftest_example.c 
 TESTAPP_PERIPHERAL_HEADERS = TestApp_Peripheral/src/intc_header.h TestApp_Peripheral/src/gpio_header.h 
 TESTAPP_PERIPHERAL_CC = powerpc-eabi-gcc
 TESTAPP_PERIPHERAL_CC_SIZE = powerpc-eabi-size

@@ -10,15 +10,15 @@
 /*                                                                 */
 /*******************************************************************/
 
-_STACK_SIZE = DEFINED(_STACK_SIZE) ? _STACK_SIZE : 0x1000;
-_HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x1000;
+_STACK_SIZE = DEFINED(_STACK_SIZE) ? _STACK_SIZE : 0x40000;
+_HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x40000;
 
 /* Define Memories in the system */
 
 MEMORY
 {
-   SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR : ORIGIN = 0x00000000, LENGTH = 0x10000000
-   xps_bram_if_cntlr_1 : ORIGIN = 0xFFFF0000, LENGTH = 0x0000FFEC
+   SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR : ORIGIN = 0x00000000, LENGTH = 0x04000000
+   xps_bram_if_cntlr_1 : ORIGIN = 0xFFFE0000, LENGTH = 0x0001FFEC
 }
 
 /* Specify the default entry point to the program */
@@ -34,21 +34,21 @@ SECTIONS
    __vectors_start = .;
    *(.vectors)
    __vectors_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .text : {
    *(.text)
    *(.text.*)
    *(.gnu.linkonce.t.*)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .init : {
    KEEP (*(.init))
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .fini : {
    KEEP (*(.fini))
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .rodata : {
    __rodata_start = .;
@@ -56,14 +56,14 @@ SECTIONS
    *(.rodata.*)
    *(.gnu.linkonce.r.*)
    __rodata_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .rodata1 : {
    __rodata1_start = .;
    *(.rodata1)
    *(.rodata1.*)
    __rodata1_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .sdata2 : {
    __sdata2_start = .;
@@ -71,7 +71,7 @@ SECTIONS
    *(.sdata2.*)
    *(.gnu.linkonce.s2.*)
    __sdata2_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .sbss2 : {
    __sbss2_start = .;
@@ -79,7 +79,7 @@ SECTIONS
    *(.sbss2.*)
    *(.gnu.linkonce.sb2.*)
    __sbss2_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .data : {
    __data_start = .;
@@ -87,26 +87,26 @@ SECTIONS
    *(.data.*)
    *(.gnu.linkonce.d.*)
    __data_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .data1 : {
    __data1_start = .;
    *(.data1)
    *(.data1.*)
    __data1_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .got : {
    *(.got)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .got1 : {
    *(.got1)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .got2 : {
    *(.got2)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .ctors : {
    __CTOR_LIST__ = .;
@@ -117,7 +117,7 @@ SECTIONS
    KEEP (*(.ctors))
    __CTOR_END__ = .;
    ___CTORS_END___ = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .dtors : {
    __DTOR_LIST__ = .;
@@ -128,25 +128,25 @@ SECTIONS
    KEEP (*(.dtors))
    __DTOR_END__ = .;
    ___DTORS_END___ = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .fixup : {
    __fixup_start = .;
    *(.fixup)
    __fixup_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .eh_frame : {
    *(.eh_frame)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .jcr : {
    *(.jcr)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .gcc_except_table : {
    *(.gcc_except_table)
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .sdata : {
    __sdata_start = .;
@@ -154,16 +154,15 @@ SECTIONS
    *(.sdata.*)
    *(.gnu.linkonce.s.*)
    __sdata_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .sbss : {
    __sbss_start = .;
    *(.sbss)
    *(.sbss.*)
    *(.gnu.linkonce.sb.*)
-   *(.scommon)
    __sbss_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .tdata : {
    __tdata_start = .;
@@ -171,7 +170,7 @@ SECTIONS
    *(.tdata.*)
    *(.gnu.linkonce.td.*)
    __tdata_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .tbss : {
    __tbss_start = .;
@@ -179,7 +178,7 @@ SECTIONS
    *(.tbss.*)
    *(.gnu.linkonce.tb.*)
    __tbss_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .bss : {
    __bss_start = .;
@@ -189,7 +188,7 @@ SECTIONS
    *(COMMON)
    . = ALIGN(4);
    __bss_end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .boot0 0xFFFFFFEC : {
    __boot0_start = .;
@@ -210,7 +209,7 @@ SECTIONS
    . += _STACK_SIZE;
    . = ALIGN(16);
    __stack = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 .heap : {
    . = ALIGN(16);
@@ -219,7 +218,7 @@ SECTIONS
    . = ALIGN(16);
    _heap_end = .;
    _end = .;
-} > xps_bram_if_cntlr_1
+} > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
 
 }
 

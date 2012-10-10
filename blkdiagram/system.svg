@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "svg10.dtd">
 <?xml-stylesheet href="system.css" type="text/css"?>
-<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:exsl="http://exslt.org/common" xmlns:xlink="http://www.w3.org/1999/xlink" width="1322" height="1407" viewBox="0 0 0 0">
+<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:exsl="http://exslt.org/common" xmlns:xlink="http://www.w3.org/1999/xlink" width="1322" height="1521" viewBox="0 0 0 0">
   <defs>
     <symbol id="KEY_IntrCntrl">
       <rect x="0" y="0" rx="3" ry="3" width="9" height="18" style="fill:#888888; stroke:none; stroke-width:1"/>
@@ -95,7 +95,7 @@
       <text class="specsvaluemid" x="241" y="72">xc2vp50ff1152-6</text>
       <rect x="0" y="80" width="300" height="16" style="fill:#EEEEEE; stroke:none;"/>
       <text class="specsheader" x="4" y="92">GENERATED</text>
-      <text class="specsvalue" x="138.5" y="92">Sat Oct  6 16:13:31 2012
+      <text class="specsvalue" x="138.5" y="92">Tue Oct  9 20:23:54 2012
 </text>
     </symbol>
     <symbol id="G_IOPort">
@@ -1234,6 +1234,21 @@
       <text class="intrsymbol" x="74" y="32">0</text>
       <text class="intrsymbol" x="83" y="32">0</text>
     </symbol>
+    <symbol id="sbsbktmodule_xps_ethernetlite_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <rect x="11" y="76" rx="3" ry="3" width="68" height="16" style="fill:#CCCCFF; stroke:none;"/>
+      <text class="ioplblgrp" x="45" y="90">F</text>
+      <text class="bciptype" x="45" y="64">xps_ethernetlite</text>
+      <text class="bciplabel" x="45" y="72">xps_ethernetlite_0</text>
+      <use x="29" y="28" xlink:href="#PLBV46_Bif"/>
+      <use x="33" y="0" xlink:href="#PLBV46_busconn_SLAVE"/>
+      <text class="biflabel" x="45" y="39">SPLB</text>
+      <rect x="72" y="24" rx="3" ry="3" width="18" height="9" style="fill:#FF9900; stroke:none; stroke-width:1"/>
+      <line x1="81" y1="24" x2="81" y2="33" style="stroke:#000000;stroke-width:1"/>
+      <text class="intrsymbol" x="74" y="32">3</text>
+      <text class="intrsymbol" x="83" y="32">0</text>
+    </symbol>
     <symbol id="sbsbktmodule_xps_intc_0">
       <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
       <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
@@ -1246,20 +1261,59 @@
       <line x1="81" y1="32" x2="90" y2="32" style="stroke:#000000;stroke-width:2"/>
       <text class="intrsymbol" x="83" y="44">0</text>
     </symbol>
+    <symbol id="sbsbktmodule_xps_timebase_wdt_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text class="bciptype" x="45" y="64">xps_timebase_wdt</text>
+      <text class="bciplabel" x="45" y="72">xps_timebase_wdt_0</text>
+      <use x="29" y="28" xlink:href="#PLBV46_Bif"/>
+      <use x="33" y="0" xlink:href="#PLBV46_busconn_SLAVE"/>
+      <text class="biflabel" x="45" y="39">SPLB</text>
+      <rect x="72" y="24" rx="3" ry="3" width="18" height="9" style="fill:#FF9900; stroke:none; stroke-width:1"/>
+      <line x1="81" y1="24" x2="81" y2="33" style="stroke:#000000;stroke-width:1"/>
+      <text class="intrsymbol" x="74" y="32">1</text>
+      <text class="intrsymbol" x="83" y="32">0</text>
+      <rect x="72" y="36" rx="3" ry="3" width="18" height="9" style="fill:#FF9900; stroke:none; stroke-width:1"/>
+      <line x1="81" y1="36" x2="81" y2="45" style="stroke:#000000;stroke-width:1"/>
+      <text class="intrsymbol" x="74" y="44">2</text>
+      <text class="intrsymbol" x="83" y="44">0</text>
+    </symbol>
+    <symbol id="sbsbktmodule_xps_timer_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text class="bciptype" x="45" y="64">xps_timer</text>
+      <text class="bciplabel" x="45" y="72">xps_timer_0</text>
+      <use x="29" y="28" xlink:href="#PLBV46_Bif"/>
+      <use x="33" y="0" xlink:href="#PLBV46_busconn_SLAVE"/>
+      <text class="biflabel" x="45" y="39">SPLB</text>
+      <rect x="72" y="24" rx="3" ry="3" width="18" height="9" style="fill:#FF9900; stroke:none; stroke-width:1"/>
+      <line x1="81" y1="24" x2="81" y2="33" style="stroke:#000000;stroke-width:1"/>
+      <text class="intrsymbol" x="74" y="32">4</text>
+      <text class="intrsymbol" x="83" y="32">0</text>
+    </symbol>
     <symbol id="sbsbucket_plb0">
-      <rect x="0" y="0" rx="4" ry="4" width="334" height="130" style="stroke-width:2; stroke:#BB9955; fill:#FFFFDD"/>
+      <rect x="0" y="0" rx="4" ry="4" width="334" height="244" style="stroke-width:2; stroke:#BB9955; fill:#FFFFDD"/>
       <use x="16" y="16" xlink:href="#sbsbktmodule_LEDS"/>
       <rect x="0" y="24" width="61" height="8" style="fill:#BB9955"/>
       <use x="122" y="16" xlink:href="#sbsbktmodule_RS232"/>
       <rect x="61" y="24" width="106" height="8" style="fill:#BB9955"/>
-      <use x="228" y="16" xlink:href="#sbsbktmodule_xps_intc_0"/>
+      <use x="228" y="16" xlink:href="#sbsbktmodule_xps_ethernetlite_0"/>
       <rect x="167" y="24" width="106" height="8" style="fill:#BB9955"/>
+      <use x="16" y="130" xlink:href="#sbsbktmodule_xps_intc_0"/>
+      <rect x="0" y="138" width="61" height="8" style="fill:#BB9955"/>
+      <use x="122" y="130" xlink:href="#sbsbktmodule_xps_timebase_wdt_0"/>
+      <rect x="61" y="138" width="106" height="8" style="fill:#BB9955"/>
+      <use x="228" y="130" xlink:href="#sbsbktmodule_xps_timer_0"/>
+      <rect x="167" y="138" width="106" height="8" style="fill:#BB9955"/>
+      <rect x="0" y="24" width="8" height="114" style="fill:#BB9955"/>
     </symbol>
     <symbol id="ipbktmodule_clock_generator_0">
       <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#000000; stroke-width:2"/>
       <rect x="11" y="18" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
       <text class="bciptype" x="45" y="26">clock_generator</text>
       <text class="bciplabel" x="45" y="34">clock_generator_0</text>
+      <rect x="11" y="38" rx="3" ry="3" width="68" height="16" style="fill:#CCCCFF; stroke:none;"/>
+      <text class="ioplblgrp" x="45" y="52">D</text>
     </symbol>
     <symbol id="ipbucket">
       <rect x="0" y="0" rx="4" ry="4" width="122" height="106" style="stroke-width:2; stroke:#000000; fill:#CCCCFF"/>
@@ -1280,7 +1334,7 @@
       <text class="bciptype" x="45" y="12">proc_sys_reset</text>
       <text class="bciplabel" x="45" y="20">proc_sys_reset_0</text>
       <rect x="11" y="24" rx="3" ry="3" width="68" height="16" style="fill:#CCCCFF; stroke:none;"/>
-      <text class="ioplblgrp" x="45" y="38">D</text>
+      <text class="ioplblgrp" x="45" y="38">E</text>
       <line x1="79" y1="64" x2="91" y2="64" style="stroke:#990066;stroke-width:1"/>
       <use x="47" y="54" xlink:href="#XIL_Bif"/>
       <text class="biflabel" x="63" y="65">RESE</text>
@@ -1398,39 +1452,65 @@
       <text class="mpmctitle" x="552" y="21">MPMC Module Interface</text>
     </symbol>
   </defs>
-  <rect x="0" y="0" width="1322" height="1407" style="fill:#FFFFFF; stroke:#000000;stroke-width:4"/>
-  <rect x="48" y="40" width="1226" height="1066" style="fill:#000088"/>
-  <rect x="64" y="56" width="1194" height="1034" rx="8" ry="8" style="fill:#CCCCCC"/>
-  <use x="32" y="451" id="fpga_0_RS232_RX_pin" xlink:href="#G_IOPort" transform="rotate(0,40,459)"/>
-  <text class="iopnumb" x="22" y="465"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="479" id="fpga_0_RS232_TX_pin" xlink:href="#G_IOPort" transform="rotate(180,40,487)"/>
-  <text class="iopnumb" x="22" y="493"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="507" id="fpga_0_LEDS_GPIO_d_out_pin" xlink:href="#G_IOPort" transform="rotate(180,40,515)"/>
-  <text class="iopnumb" x="22" y="521"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="535" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_Addr_pin" xlink:href="#G_IOPort" transform="rotate(180,40,543)"/>
-  <text class="iopnumb" x="22" y="549"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="563" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_BankAddr_pin" xlink:href="#G_IOPort" transform="rotate(180,40,571)"/>
-  <text class="iopnumb" x="22" y="577"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="591" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_CAS_n_pin" xlink:href="#G_IOPort" transform="rotate(180,40,599)"/>
-  <text class="iopnumb" x="22" y="605"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="619" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_RAS_n_pin" xlink:href="#G_IOPort" transform="rotate(180,40,627)"/>
-  <text class="iopnumb" x="22" y="633"><tspan class="iopgrp"></tspan></text>
-  <use x="32" y="647" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_WE_n_pin" xlink:href="#G_IOPort" transform="rotate(180,40,655)"/>
-  <text class="iopnumb" x="22" y="661"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="451" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_CE_pin" xlink:href="#G_IOPort" transform="rotate(0,1282,459)"/>
-  <text class="iopnumb" x="1302" y="465"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="479" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_CS_n_pin" xlink:href="#G_IOPort" transform="rotate(0,1282,487)"/>
-  <text class="iopnumb" x="1302" y="493"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="507" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_Clk_pin" xlink:href="#G_IOPort" transform="rotate(0,1282,515)"/>
-  <text class="iopnumb" x="1302" y="521"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="535" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_DM_pin" xlink:href="#G_IOPort" transform="rotate(0,1282,543)"/>
-  <text class="iopnumb" x="1302" y="549"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="563" id="fpga_0_SDR_SDRAM_CUSTOM_SDRAM_DQ" xlink:href="#G_BIPort" transform="rotate(0,1282,571)"/>
-  <text class="iopnumb" x="1302" y="577"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="591" id="sys_clk_pin" xlink:href="#G_IOPort" transform="rotate(180,1282,599)"/>
-  <text class="iopnumb" x="1302" y="605"><tspan class="iopgrp"></tspan></text>
-  <use x="1274" y="619" id="sys_rst_pin" xlink:href="#G_IOPort" transform="rotate(180,1282,627)"/>
-  <text class="iopnumb" x="1302" y="633"><tspan class="iopgrp"></tspan></text>
+  <rect x="0" y="0" width="1322" height="1521" style="fill:#FFFFFF; stroke:#000000;stroke-width:4"/>
+  <rect x="48" y="40" width="1226" height="1180" style="fill:#000088"/>
+  <rect x="64" y="56" width="1194" height="1148" rx="8" ry="8" style="fill:#CCCCCC"/>
+  <use x="32" y="424" id="RS232_RX" xlink:href="#G_IOPort" transform="rotate(0,40,432)"/>
+  <text class="iopnumb" x="22" y="438"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="452" id="RS232_TX" xlink:href="#G_IOPort" transform="rotate(180,40,460)"/>
+  <text class="iopnumb" x="22" y="466"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="480" id="LEDS_GPIO" xlink:href="#G_IOPort" transform="rotate(180,40,488)"/>
+  <text class="iopnumb" x="22" y="494"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="508" id="SDRAM_A" xlink:href="#G_IOPort" transform="rotate(180,40,516)"/>
+  <text class="iopnumb" x="22" y="522"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="536" id="SDRAM_BA" xlink:href="#G_IOPort" transform="rotate(180,40,544)"/>
+  <text class="iopnumb" x="22" y="550"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="564" id="SDRAM_CAS" xlink:href="#G_IOPort" transform="rotate(180,40,572)"/>
+  <text class="iopnumb" x="22" y="578"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="592" id="SDRAM_RAS" xlink:href="#G_IOPort" transform="rotate(180,40,600)"/>
+  <text class="iopnumb" x="22" y="606"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="620" id="SDRAM_WE" xlink:href="#G_IOPort" transform="rotate(180,40,628)"/>
+  <text class="iopnumb" x="22" y="634"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="648" id="SDRAM_CKE" xlink:href="#G_IOPort" transform="rotate(180,40,656)"/>
+  <text class="iopnumb" x="22" y="662"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="676" id="SDRAM_CS" xlink:href="#G_IOPort" transform="rotate(180,40,684)"/>
+  <text class="iopnumb" x="22" y="690"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="704" id="SDRAM_CLK" xlink:href="#G_IOPort" transform="rotate(180,40,712)"/>
+  <text class="iopnumb" x="22" y="718"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="732" id="SDRAM_DM" xlink:href="#G_IOPort" transform="rotate(180,40,740)"/>
+  <text class="iopnumb" x="22" y="746"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="760" id="SDRAM_DQ" xlink:href="#G_BIPort" transform="rotate(0,40,768)"/>
+  <text class="iopnumb" x="22" y="774"><tspan class="iopgrp"></tspan></text>
+  <use x="32" y="788" id="sys_clk_pin" xlink:href="#G_IOPort" transform="rotate(0,40,796)"/>
+  <text class="iopnumb" x="22" y="802"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="424" id="sys_rst_pin" xlink:href="#G_IOPort" transform="rotate(180,1282,432)"/>
+  <text class="iopnumb" x="1302" y="438"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="452" id="PHY_tx_data" xlink:href="#G_IOPort" transform="rotate(0,1282,460)"/>
+  <text class="iopnumb" x="1302" y="466"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="480" id="PHY_tx_en" xlink:href="#G_IOPort" transform="rotate(0,1282,488)"/>
+  <text class="iopnumb" x="1302" y="494"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="508" id="PHY_rst_n" xlink:href="#G_IOPort" transform="rotate(0,1282,516)"/>
+  <text class="iopnumb" x="1302" y="522"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="536" id="PHY_rx_er" xlink:href="#G_IOPort" transform="rotate(180,1282,544)"/>
+  <text class="iopnumb" x="1302" y="550"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="564" id="PHY_col" xlink:href="#G_IOPort" transform="rotate(180,1282,572)"/>
+  <text class="iopnumb" x="1302" y="578"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="592" id="PHY_rx_data" xlink:href="#G_IOPort" transform="rotate(180,1282,600)"/>
+  <text class="iopnumb" x="1302" y="606"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="620" id="PHY_dv" xlink:href="#G_IOPort" transform="rotate(180,1282,628)"/>
+  <text class="iopnumb" x="1302" y="634"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="648" id="PHY_crs" xlink:href="#G_IOPort" transform="rotate(180,1282,656)"/>
+  <text class="iopnumb" x="1302" y="662"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="676" id="PHY_rx_clk" xlink:href="#G_IOPort" transform="rotate(180,1282,684)"/>
+  <text class="iopnumb" x="1302" y="690"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="704" id="PHY_tx_clk" xlink:href="#G_IOPort" transform="rotate(180,1282,712)"/>
+  <text class="iopnumb" x="1302" y="718"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="732" id="PHY_tx_er" xlink:href="#G_IOPort" transform="rotate(0,1282,740)"/>
+  <text class="iopnumb" x="1302" y="746"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="760" id="PHY_mdc" xlink:href="#G_IOPort" transform="rotate(0,1282,768)"/>
+  <text class="iopnumb" x="1302" y="774"><tspan class="iopgrp"></tspan></text>
+  <use x="1274" y="788" id="PHY_mdio" xlink:href="#G_IOPort" transform="rotate(180,1282,796)"/>
+  <text class="iopnumb" x="1302" y="802"><tspan class="iopgrp"></tspan></text>
   <use x="109" y="539" xlink:href="#group_sharedBusses"/>
   <use x="269" y="181" xlink:href="#symbol_SPACE_WEST_NONE_EAST_0"/>
   <use x="676" y="181" xlink:href="#symbol_SPACE_WEST_0_EAST_1"/>
@@ -1456,8 +1536,8 @@
   <use x="934" y="170" xlink:href="#PLBV46_P2P_BusArrowNorth"/>
   <rect x="936" y="182" width="8" height="1" style="stroke:none; fill:#BB9955"/>
   <text class="p2pbuslabel" x="948" y="177">ppc405_0_iplb1</text>
-  <text class="ipclass" x="600" y="877">IP</text>
-  <use x="600" y="881" xlink:href="#ipbucket"/>
-  <use x="806" y="1149" xlink:href="#BlkDiagram_Key"/>
-  <use x="48" y="1149" xlink:href="#BlkDiagram_Specs"/>
+  <text class="ipclass" x="600" y="991">IP</text>
+  <use x="600" y="995" xlink:href="#ipbucket"/>
+  <use x="806" y="1263" xlink:href="#BlkDiagram_Key"/>
+  <use x="48" y="1263" xlink:href="#BlkDiagram_Specs"/>
 </svg>
