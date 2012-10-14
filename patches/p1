@@ -1,0 +1,31 @@
+--- include/netif/xadapter.h	2011-11-03 18:56:43.891086769 +0200
++++ include/netif/xadapter.h	2011-10-04 12:33:30.000000000 +0300
+@@ -23,6 +23,13 @@
+ extern "C" { 
+ #endif
+ 
++#include "lwipopts.h"
++
++#if !NO_SYS
++#include "xmk.h"
++#include "lwip/sys.h"
++#endif
++
+ #include "lwip/netif.h"
+ #include "lwip/ip.h"
+ 
+@@ -32,10 +39,13 @@
+ 	enum xemac_types type;
+ 	int  topology_index;
+ 	void *state;
++#if !NO_SYS
++        sys_sem_t sem_rx_data_available;
++#endif
+ };
+ 
+ void 		lwip_raw_init();
+-void 		xemacif_input(struct netif *netif);
++int 		xemacif_input(struct netif *netif);
+ void 		xemacif_input_thread(struct netif *netif);
+ struct netif *	xemac_add(struct netif *netif, 
+ 	struct ip_addr *ipaddr, struct ip_addr *netmask, struct ip_addr *gw,
