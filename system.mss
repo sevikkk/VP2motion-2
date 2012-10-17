@@ -9,12 +9,11 @@ BEGIN OS
  PARAMETER sysintc_spec = xps_intc_0
  PARAMETER stdout = RS232
  PARAMETER stdin = RS232
- PARAMETER config_debug_support = true
  PARAMETER debug_mon = true
  PARAMETER enhanced_features = true
  PARAMETER config_yield = true
  PARAMETER config_kill = true
- PARAMETER systmr_dev = xps_timer_0
+ PARAMETER systmr_dev = fit_timer_0
  PARAMETER config_msgq = true
  PARAMETER config_sema = true
  PARAMETER config_named_sema = true
@@ -24,11 +23,16 @@ BEGIN OS
  PARAMETER msgq_capacity = 100
  PARAMETER num_msgqs = 100
  PARAMETER max_sem_waitq = 100
- PARAMETER max_sem = 25
+ PARAMETER max_sem = 100
  PARAMETER max_tmrs = 100
  PARAMETER max_pthreads = 100
+ PARAMETER config_pthread_mutex = true
  PARAMETER systmr_interval = 1
- PARAMETER static_pthread_table = ((main_thread,1))
+ PARAMETER sched_type = SCHED_PRIO
+ PARAMETER max_readyq = 100
+ PARAMETER max_pthread_mutex_waitq = 100
+ PARAMETER max_pthread_mutex = 100
+ PARAMETER static_pthread_table = ((main_thread,3))
 END
 
 
@@ -112,6 +116,24 @@ BEGIN DRIVER
  PARAMETER DRIVER_NAME = tmrctr
  PARAMETER DRIVER_VER = 1.10.b
  PARAMETER HW_INSTANCE = xps_timer_0
+END
+
+BEGIN DRIVER
+ PARAMETER DRIVER_NAME = spi
+ PARAMETER DRIVER_VER = 2.00.a
+ PARAMETER HW_INSTANCE = xps_spi_sd
+END
+
+BEGIN DRIVER
+ PARAMETER DRIVER_NAME = spi
+ PARAMETER DRIVER_VER = 2.00.a
+ PARAMETER HW_INSTANCE = xps_spi_max
+END
+
+BEGIN DRIVER
+ PARAMETER DRIVER_NAME = spi
+ PARAMETER DRIVER_VER = 2.00.a
+ PARAMETER HW_INSTANCE = xps_spi_osram
 END
 
 

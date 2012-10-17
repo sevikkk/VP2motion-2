@@ -163,6 +163,42 @@ TestApp_Memory_programclean:
 	rm -f $(TESTAPP_MEMORY_OUTPUT) 
 
 #################################################################
+# SOFTWARE APPLICATION MEMTEST
+#################################################################
+
+memtest_program: $(MEMTEST_OUTPUT) 
+
+$(MEMTEST_OUTPUT) : $(MEMTEST_SOURCES) $(MEMTEST_HEADERS) $(MEMTEST_LINKER_SCRIPT) \
+                    $(LIBRARIES) __xps/memtest_compiler.opt
+	@mkdir -p $(MEMTEST_OUTPUT_DIR) 
+	$(MEMTEST_CC) $(MEMTEST_CC_OPT) $(MEMTEST_SOURCES) -o $(MEMTEST_OUTPUT) \
+	$(MEMTEST_OTHER_CC_FLAGS) $(MEMTEST_INCLUDES) $(MEMTEST_LIBPATH) \
+	$(MEMTEST_CFLAGS) $(MEMTEST_LFLAGS) 
+	$(MEMTEST_CC_SIZE) $(MEMTEST_OUTPUT) 
+	@echo ""
+
+memtest_programclean:
+	rm -f $(MEMTEST_OUTPUT) 
+
+#################################################################
+# SOFTWARE APPLICATION SDLOADER
+#################################################################
+
+sdloader_program: $(SDLOADER_OUTPUT) 
+
+$(SDLOADER_OUTPUT) : $(SDLOADER_SOURCES) $(SDLOADER_HEADERS) $(SDLOADER_LINKER_SCRIPT) \
+                    $(LIBRARIES) __xps/sdloader_compiler.opt
+	@mkdir -p $(SDLOADER_OUTPUT_DIR) 
+	$(SDLOADER_CC) $(SDLOADER_CC_OPT) $(SDLOADER_SOURCES) -o $(SDLOADER_OUTPUT) \
+	$(SDLOADER_OTHER_CC_FLAGS) $(SDLOADER_INCLUDES) $(SDLOADER_LIBPATH) \
+	$(SDLOADER_CFLAGS) $(SDLOADER_LFLAGS) 
+	$(SDLOADER_CC_SIZE) $(SDLOADER_OUTPUT) 
+	@echo ""
+
+sdloader_programclean:
+	rm -f $(SDLOADER_OUTPUT) 
+
+#################################################################
 # BOOTLOOP ELF FILES
 #################################################################
 
@@ -215,11 +251,11 @@ $(DOWNLOAD_BIT): $(SYSTEM_BIT) $(BRAMINIT_ELF_FILES) __xps/bitinit.opt
 	-bt $(SYSTEM_BIT) -o $(DOWNLOAD_BIT)
 	@rm -f $(SYSTEM)_bd.bmm
 
-$(SYSTEM_ACE): $(DOWNLOAD_BIT) $(TESTAPP_MEMORY_OUTPUT) 
+$(SYSTEM_ACE): $(DOWNLOAD_BIT) $(TESTAPP_MEMORY_OUTPUT) $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT) 
 	@echo "*********************************************"
 	@echo "Creating system ace file"
 	@echo "*********************************************"
-	xmd -tcl genace.tcl -jprog -hw $(DOWNLOAD_BIT) -elf $(TESTAPP_MEMORY_OUTPUT)  -target ppc_hw  -ace $(SYSTEM_ACE)
+	xmd -tcl genace.tcl -jprog -hw $(DOWNLOAD_BIT) -elf $(TESTAPP_MEMORY_OUTPUT) $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT)  -target ppc_hw  -ace $(SYSTEM_ACE)
 
 #################################################################
 # SIMULATION FLOW

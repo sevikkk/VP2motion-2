@@ -48,6 +48,17 @@
  PORT PHY_tx_er = net_gnd, DIR = O
  PORT PHY_mdc = net_vcc, DIR = O
  PORT PHY_mdio = net_ExternalPort_0, DIR = I
+ PORT SD_CS = xps_spi_0_SS_O, DIR = O, VEC = [0:0]
+ PORT SD_DO = xps_spi_0_MOSI_O, DIR = O
+ PORT SD_DI = xps_spi_0_MISO_I, DIR = I
+ PORT SD_CLK = xps_spi_0_SCK_O, DIR = O
+ PORT MAX_CS = xps_spi_max_SS_O, DIR = O, VEC = [0:0]
+ PORT MAX_DI = xps_spi_max_MOSI_O, DIR = O
+ PORT MAX_DO = xps_spi_max_MISO_I, DIR = I
+ PORT MAX_SCK = xps_spi_max_SCK_O, DIR = O
+ PORT OSRAM_LOAD = osram_load_inv_Res, DIR = O, VEC = [0:0]
+ PORT OSRAM_DATA = osram_data_inv_Res, DIR = O
+ PORT OSRAM_CLK = osram_clk_inv_Res, DIR = O
 
 
 BEGIN ppc405
@@ -214,7 +225,7 @@ BEGIN xps_intc
  PARAMETER C_HIGHADDR = 0x8180ffff
  BUS_INTERFACE SPLB = plb0
  PORT Irq = EICC405EXTINPUTIRQ
- PORT Intr = RS232_Interrupt&xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt&xps_timer_0_Interrupt
+ PORT Intr = RS232_Interrupt&xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt&xps_timer_0_Interrupt&xps_spi_sd_IP2INTC_Irpt&xps_spi_max_IP2INTC_Irpt&xps_spi_osram_IP2INTC_Irpt&fit_timer_0_Interrupt
 END
 
 BEGIN xps_timebase_wdt
@@ -255,5 +266,87 @@ BEGIN xps_timer
  PARAMETER C_HIGHADDR = 0x83c0ffff
  BUS_INTERFACE SPLB = plb0
  PORT Interrupt = xps_timer_0_Interrupt
+END
+
+BEGIN xps_spi
+ PARAMETER INSTANCE = xps_spi_sd
+ PARAMETER HW_VER = 2.00.b
+ PARAMETER C_BASEADDR = 0x83c18000
+ PARAMETER C_HIGHADDR = 0x83c1807f
+ BUS_INTERFACE SPLB = plb0
+ PORT SPISEL = net_vcc
+ PORT SS_O = xps_spi_0_SS_O
+ PORT MOSI_O = xps_spi_0_MOSI_O
+ PORT MISO_I = xps_spi_0_MISO_I
+ PORT SCK_O = xps_spi_0_SCK_O
+ PORT MOSI_I = net_gnd
+ PORT SCK_I = net_gnd
+ PORT IP2INTC_Irpt = xps_spi_sd_IP2INTC_Irpt
+END
+
+BEGIN xps_spi
+ PARAMETER INSTANCE = xps_spi_max
+ PARAMETER HW_VER = 2.00.b
+ PARAMETER C_BASEADDR = 0x83c1c080
+ PARAMETER C_HIGHADDR = 0x83c1c0ff
+ BUS_INTERFACE SPLB = plb0
+ PORT SS_O = xps_spi_max_SS_O
+ PORT SPISEL = net_vcc
+ PORT MOSI_O = xps_spi_max_MOSI_O
+ PORT MISO_I = xps_spi_max_MISO_I
+ PORT SCK_O = xps_spi_max_SCK_O
+ PORT IP2INTC_Irpt = xps_spi_max_IP2INTC_Irpt
+END
+
+BEGIN xps_spi
+ PARAMETER INSTANCE = xps_spi_osram
+ PARAMETER HW_VER = 2.00.b
+ PARAMETER C_BASEADDR = 0x83c14000
+ PARAMETER C_HIGHADDR = 0x83c1407f
+ PARAMETER C_SCK_RATIO = 128
+ BUS_INTERFACE SPLB = plb0
+ PORT SS_O = xps_spi_osram_SS_O
+ PORT SPISEL = net_vcc
+ PORT MOSI_O = xps_spi_osram_MOSI_O
+ PORT SCK_O = xps_spi_osram_SCK_O
+ PORT IP2INTC_Irpt = xps_spi_osram_IP2INTC_Irpt
+END
+
+BEGIN fit_timer
+ PARAMETER INSTANCE = fit_timer_0
+ PARAMETER HW_VER = 1.01.a
+ PORT Clk = sys_clk_s
+ PORT Rst = net_gnd
+ PORT Interrupt = fit_timer_0_Interrupt
+END
+
+BEGIN util_vector_logic
+ PARAMETER INSTANCE = osram_data_inv
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_OPERATION = xor
+ PARAMETER C_SIZE = 1
+ PORT Op1 = xps_spi_osram_MOSI_O
+ PORT Op2 = net_vcc
+ PORT Res = osram_data_inv_Res
+END
+
+BEGIN util_vector_logic
+ PARAMETER INSTANCE = osram_clk_inv
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_OPERATION = xor
+ PARAMETER C_SIZE = 1
+ PORT Op1 = xps_spi_osram_SCK_O
+ PORT Op2 = net_vcc
+ PORT Res = osram_clk_inv_Res
+END
+
+BEGIN util_vector_logic
+ PARAMETER INSTANCE = osram_load_inv
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_OPERATION = xor
+ PARAMETER C_SIZE = 1
+ PORT Op2 = net_vcc
+ PORT Op1 = xps_spi_osram_SS_O
+ PORT Res = osram_load_inv_Res
 END
 

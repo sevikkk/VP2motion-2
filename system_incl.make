@@ -39,6 +39,12 @@ OBSERVE_PAR_OPTIONS = -error yes
 TESTAPP_MEMORY_OUTPUT_DIR = TestApp_Memory
 TESTAPP_MEMORY_OUTPUT = $(TESTAPP_MEMORY_OUTPUT_DIR)/executable.elf
 
+MEMTEST_OUTPUT_DIR = memtest
+MEMTEST_OUTPUT = $(MEMTEST_OUTPUT_DIR)/executable.elf
+
+SDLOADER_OUTPUT_DIR = sdloader
+SDLOADER_OUTPUT = $(SDLOADER_OUTPUT_DIR)/executable.elf
+
 MICROBLAZE_BOOTLOOP = $(XILINX_EDK_DIR)/sw/lib/microblaze/mb_bootloop.elf
 PPC405_BOOTLOOP = $(XILINX_EDK_DIR)/sw/lib/ppc405/ppc_bootloop.elf
 PPC440_BOOTLOOP = $(XILINX_EDK_DIR)/sw/lib/ppc440/ppc440_bootloop.elf
@@ -46,10 +52,10 @@ BOOTLOOP_DIR = bootloops
 
 PPC405_0_BOOTLOOP = $(BOOTLOOP_DIR)/ppc405_0.elf
 
-BRAMINIT_ELF_FILES =   $(PPC405_0_BOOTLOOP) 
-BRAMINIT_ELF_FILE_ARGS =   -pe ppc405_0  $(PPC405_0_BOOTLOOP) 
+BRAMINIT_ELF_FILES =  $(SDLOADER_OUTPUT) 
+BRAMINIT_ELF_FILE_ARGS =   -pe ppc405_0 $(SDLOADER_OUTPUT) 
 
-ALL_USER_ELF_FILES = $(TESTAPP_MEMORY_OUTPUT) 
+ALL_USER_ELF_FILES = $(TESTAPP_MEMORY_OUTPUT) $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT) 
 
 SIM_CMD = vsim
 
@@ -72,7 +78,7 @@ VPEXEC = virtualplatform/vpexec
 
 LIBSCLEAN_TARGETS = ppc405_0_libsclean 
 
-PROGRAMCLEAN_TARGETS = TestApp_Memory_programclean 
+PROGRAMCLEAN_TARGETS = TestApp_Memory_programclean memtest_programclean sdloader_programclean 
 
 CORE_STATE_DEVELOPMENT_FILES = 
 
@@ -91,7 +97,14 @@ implementation/proc_sys_reset_0_wrapper.ngc \
 implementation/xps_intc_0_wrapper.ngc \
 implementation/xps_timebase_wdt_0_wrapper.ngc \
 implementation/xps_ethernetlite_0_wrapper.ngc \
-implementation/xps_timer_0_wrapper.ngc
+implementation/xps_timer_0_wrapper.ngc \
+implementation/xps_spi_sd_wrapper.ngc \
+implementation/xps_spi_max_wrapper.ngc \
+implementation/xps_spi_osram_wrapper.ngc \
+implementation/fit_timer_0_wrapper.ngc \
+implementation/osram_data_inv_wrapper.ngc \
+implementation/osram_clk_inv_wrapper.ngc \
+implementation/osram_load_inv_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 
@@ -144,3 +157,63 @@ TESTAPP_MEMORY_OTHER_CC_FLAGS= $(TESTAPP_MEMORY_CC_GLOBPTR_FLAG)  \
                   $(TESTAPP_MEMORY_CC_START_ADDR_FLAG) $(TESTAPP_MEMORY_CC_STACK_SIZE_FLAG) $(TESTAPP_MEMORY_CC_HEAP_SIZE_FLAG)  \
                   $(TESTAPP_MEMORY_CC_INFERRED_FLAGS)  \
                   $(TESTAPP_MEMORY_LINKER_SCRIPT_FLAG) $(TESTAPP_MEMORY_CC_DEBUG_FLAG) $(TESTAPP_MEMORY_CC_PROFILE_FLAG) 
+
+#################################################################
+# SOFTWARE APPLICATION MEMTEST
+#################################################################
+
+MEMTEST_SOURCES = memtest/src/TestApp_Memory.c 
+
+MEMTEST_HEADERS = 
+
+MEMTEST_CC = powerpc-eabi-gcc
+MEMTEST_CC_SIZE = powerpc-eabi-size
+MEMTEST_CC_OPT = -O2
+MEMTEST_CFLAGS = 
+MEMTEST_CC_SEARCH = # -B
+MEMTEST_LIBPATH = -L./ppc405_0/lib/ # -L
+MEMTEST_INCLUDES = -I./ppc405_0/include/ # -I
+MEMTEST_LFLAGS = # -l
+MEMTEST_LINKER_SCRIPT = memtest/memtest_linker_script.ld
+MEMTEST_LINKER_SCRIPT_FLAG = -Wl,-T -Wl,$(MEMTEST_LINKER_SCRIPT) 
+MEMTEST_CC_DEBUG_FLAG =  -g 
+MEMTEST_CC_PROFILE_FLAG = # -pg
+MEMTEST_CC_GLOBPTR_FLAG= # -msdata=eabi
+MEMTEST_CC_INFERRED_FLAGS= 
+MEMTEST_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_START_ADDR=
+MEMTEST_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
+MEMTEST_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
+MEMTEST_OTHER_CC_FLAGS= $(MEMTEST_CC_GLOBPTR_FLAG)  \
+                  $(MEMTEST_CC_START_ADDR_FLAG) $(MEMTEST_CC_STACK_SIZE_FLAG) $(MEMTEST_CC_HEAP_SIZE_FLAG)  \
+                  $(MEMTEST_CC_INFERRED_FLAGS)  \
+                  $(MEMTEST_LINKER_SCRIPT_FLAG) $(MEMTEST_CC_DEBUG_FLAG) $(MEMTEST_CC_PROFILE_FLAG) 
+
+#################################################################
+# SOFTWARE APPLICATION SDLOADER
+#################################################################
+
+SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c 
+
+SDLOADER_HEADERS = 
+
+SDLOADER_CC = powerpc-eabi-gcc
+SDLOADER_CC_SIZE = powerpc-eabi-size
+SDLOADER_CC_OPT = -O2
+SDLOADER_CFLAGS = 
+SDLOADER_CC_SEARCH = # -B
+SDLOADER_LIBPATH = -L./ppc405_0/lib/ # -L
+SDLOADER_INCLUDES = -I./ppc405_0/include/ # -I
+SDLOADER_LFLAGS = # -l
+SDLOADER_LINKER_SCRIPT = sdloader/sdloader_linker_script.ld
+SDLOADER_LINKER_SCRIPT_FLAG = -Wl,-T -Wl,$(SDLOADER_LINKER_SCRIPT) 
+SDLOADER_CC_DEBUG_FLAG =  -g 
+SDLOADER_CC_PROFILE_FLAG = # -pg
+SDLOADER_CC_GLOBPTR_FLAG= # -msdata=eabi
+SDLOADER_CC_INFERRED_FLAGS= 
+SDLOADER_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_START_ADDR=
+SDLOADER_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
+SDLOADER_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
+SDLOADER_OTHER_CC_FLAGS= $(SDLOADER_CC_GLOBPTR_FLAG)  \
+                  $(SDLOADER_CC_START_ADDR_FLAG) $(SDLOADER_CC_STACK_SIZE_FLAG) $(SDLOADER_CC_HEAP_SIZE_FLAG)  \
+                  $(SDLOADER_CC_INFERRED_FLAGS)  \
+                  $(SDLOADER_LINKER_SCRIPT_FLAG) $(SDLOADER_CC_DEBUG_FLAG) $(SDLOADER_CC_PROFILE_FLAG) 
