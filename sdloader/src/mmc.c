@@ -171,29 +171,32 @@ int mmc_init(void)
   return 0;
 }
 
-int mmc_read_block(uint16_t block_number, uint8_t* block_address)
+int mmc_read_block(uint32_t block_number, uint8_t* block_address)
 {
   uint16_t checksum;
   uint16_t varh, varl;
 
-  varl = ((block_number & 0x003F) << 9);
-  varh = ((block_number & 0xFFC0) >> 7);
+  varl = (block_number & 0x007F) << 9;
+  varh = (block_number >> 7) & 0xffff;
 
-  /* printf("read block %i\r\n", block_number); */
+  //printf("read block %d %d %d\r\n", block_number, varl, varh);
 
   CLEAR_CS();
   {
     /* send MMC CMD17(READ_SINGLE_BLOCK) to read the data from MMC card */
     mmc_cmd[0] = 0x51;
     /* high block address bits, varh HIGH and LOW */
-    mmc_cmd[1] = varh >> 0x08;
-    mmc_cmd[2] = varh & 0xFF;
+    mmc_cmd[1] = (varh >> 0x08);
+    mmc_cmd[2] = (varh & 0xFF);
     /* low block address bits, varl HIGH and LOW */
-    mmc_cmd[3] = varl >> 0x08;
-    mmc_cmd[4] = varl & 0xFF;
+    mmc_cmd[3] = (varl >> 0x08);
+    mmc_cmd[4] = (varl & 0xFF);
     /* checksum is no longer required but we always send 0xFF */
     mmc_cmd[5] = 0xFF;
     spi_send(mmc_cmd, MMC_CMD_SIZE);
+
+    //printf("mmc_cmd: ");
+    //print_block(mmc_cmd, 16);
 
     /* if mmc_response returns 1 then we failed to get a 0x00 response */
     if ((mmc_response(0x00)) == 1)
@@ -222,7 +225,7 @@ int mmc_read_block(uint16_t block_number, uint8_t* block_address)
   
   spi_receive_byte();
   
-  /* printf("block received\r\n"); */
+  //printf("block received\r\n");
   return 0;
 }
 

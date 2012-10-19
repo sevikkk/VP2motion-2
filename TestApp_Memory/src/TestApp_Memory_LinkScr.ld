@@ -23,8 +23,8 @@ MEMORY
 
 /* Specify the default entry point to the program */
 
-ENTRY(_boot)
-STARTUP(boot.o)
+ENTRY(_start)
+/* STARTUP(boot.o) */
 
 /* Define the sections, and where they are mapped in memory */
 
@@ -189,18 +189,6 @@ SECTIONS
    . = ALIGN(4);
    __bss_end = .;
 } > SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR
-
-.boot0 0xFFFFFFEC : {
-   __boot0_start = .;
-   *(.boot0)
-   __boot0_end = .;
-} 
-
-.boot 0xFFFFFFFC : {
-   __boot_start = .;
-   *(.boot)
-   __boot_end = .;
-} 
 
 /* Generate Stack and Heap Sections */
 

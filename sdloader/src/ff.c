@@ -826,6 +826,7 @@ DWORD get_fat (	/* 0xFFFFFFFF:Disk error, 1:Internal error, Else:Cluster status 
 	UINT wc, bc;
 	BYTE *p;
 
+	//xil_printf("get_fat: %d\r\n", clst);
 
 	if (clst < 2 || clst >= fs->n_fatent)	/* Check range */
 		return 1;
@@ -840,6 +841,7 @@ DWORD get_fat (	/* 0xFFFFFFFF:Disk error, 1:Internal error, Else:Cluster status 
 		return (clst & 1) ? (wc >> 4) : (wc & 0xFFF);
 
 	case FS_FAT16 :
+		//xil_printf("fatbase: %d sector: %d byte: %d\r\n", fs->fatbase, fs->fatbase + (clst / (SS(fs) / 2)), clst * 2 % SS(fs));
 		if (move_window(fs, fs->fatbase + (clst / (SS(fs) / 2)))) break;
 		p = &fs->win[clst * 2 % SS(fs)];
 		return LD_WORD(p);

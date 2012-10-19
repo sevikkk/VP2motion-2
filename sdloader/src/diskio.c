@@ -67,13 +67,13 @@ DRESULT disk_read (
 	switch (drv) {
 	case SD :
 		// translate the arguments here
-		/* xil_printf("readblock: %d %d\r\n",sector, count); */
+		//xil_printf("readblock: %d %d\r\n",sector, count);
 		for (i=0; i<count; i++) {
 			result = mmc_read_block(sector + i, buff + MMC_BLOCK_SIZE*i);
 			if (result != 0)
 				return RES_ERROR;
 		};
-		/* print_block(buff, count*MMC_BLOCK_SIZE); */
+		//print_block(buff, count*MMC_BLOCK_SIZE);
 
 		return RES_OK;
 	}

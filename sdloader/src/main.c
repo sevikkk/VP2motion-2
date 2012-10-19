@@ -13,6 +13,8 @@
 #include "osram.h"
 
 #include "ff.h"
+#include "elf.h"
+#define printf xil_printf
 
 const char osram_Boot[26] = {
         0x03, 0x0f,
@@ -22,7 +24,7 @@ const char osram_Boot[26] = {
         0x05, 0x41, 0xe6, 0x42, 0x44, 0x30
 };
 
-char mmc_block[MMC_BLOCK_SIZE];
+char buf[MMC_BLOCK_SIZE];
 
 FATFS Fatfs;		/* File system object */
 FIL Fil;			/* File object */
@@ -30,66 +32,123 @@ FIL Fil;			/* File object */
 int main(void)
 {
 	XStatus s;
+	FRESULT rc;				/* Result code */
 	int i;
+	Elf32_Ehdr *ehdr;
+	Elf32_Phdr *phdr;
+	int br, ph_offset, ph_num, ph_size;
+	void (*entry)(void);
+
 	print("\r\n\r\nStart\r\n");
 
 	s = osram_init();
-	if (s != XST_SUCCESS)
+	if (s != XST_SUCCESS) {
 		xil_printf("osram_init: %d\r\n", s);
+		return -1;
+	};
 	
 	for (i=0; i<26; i++) {
 		osram_send(osram_Boot[i]);
 	};
 
 	s = mmc_if_init();
-	if (s != XST_SUCCESS)
+	if (s != XST_SUCCESS) {
 		xil_printf("mmc_if_init: %d\r\n", s);
-
-  /* Init the MMC */
-  xil_printf("mmc_init: ");
-  s = mmc_init();
-  xil_printf("%d\r\n", s);
-
-  /* Reset the MMC buffer */
-  memset(mmc_block, 0xCA, MMC_BLOCK_SIZE);
-
-  /* Read the first block */
-  mmc_read_block(0, mmc_block);
-  print_block(mmc_block, MMC_BLOCK_SIZE);
-  mmc_read_block(1, mmc_block);
-  print_block(mmc_block, MMC_BLOCK_SIZE);
-  mmc_read_block(2, mmc_block);
-  print_block(mmc_block, MMC_BLOCK_SIZE);
-
-{
-		FRESULT rc;				/* Result code */
-		DIR dir;				/* Directory object */
-		FILINFO fno;			/* File information object */
-	
-		f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
-
-
-	xil_printf("\r\nOpen root directory.\r\n");
-	rc = f_opendir(&dir, "");
-	if (rc) {
-		xil_printf("opendir: %d\r\n", rc);
+		return -1;
 	};
 
-	xil_printf("\r\nDirectory listing...\r\n");
-	for (;;) {
-		rc = f_readdir(&dir, &fno);		/* Read a directory item */
-		if (rc || !fno.fname[0]) break;	/* Error or end of dir */
-		/* print_block(&fno, sizeof(fno)); */
-		if (fno.fattrib & AM_DIR)
-			xil_printf("   <dir>  %s\r\n", fno.fname);
-		else
-			xil_printf("%9d  %s\r\n", fno.fsize, fno.fname);
-	}
-	if (rc) xil_printf("readdir: %d\r\n", rc);
-	rc = f_open(&Fil, "sh.s3g", FA_READ);
-	if (rc) xil_printf("open: %d\r\n", rc);
+  /* Init the MMC */
+  s = mmc_init();
+	if (s != XST_SUCCESS) {
+		xil_printf("mmc_init: %d\r\n", s);
+		return -1;
+	};
 
-  }
+	
+	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
+
+	rc = f_open(&Fil, "boot.elf", FA_READ);
+	if (rc) {
+		xil_printf("f_open: %d\r\n", rc);
+		return -1;
+	};
+	//xil_printf("first cluster: %x(%d)\r\n", Fil.sclust, Fil.sclust);
+
+	rc = f_read(&Fil, buf, MMC_BLOCK_SIZE, &i);
+	if (rc) {
+		xil_printf("f_read: %d\r\n", rc);
+		return -1;
+	};
+	//print_block(buf, 512);
+	//xil_printf("num: %d\r\n", i);
+	ehdr = (Elf32_Ehdr *)buf;
+	if (
+		ehdr->e_ident[EI_MAG0] != ELFMAG0 ||
+		ehdr->e_ident[EI_MAG1] != ELFMAG1 ||
+		ehdr->e_ident[EI_MAG2] != ELFMAG2 ||
+		ehdr->e_ident[EI_MAG3] != ELFMAG3
+	   ) {
+		printf("ERROR: Bad magic\r\n");
+		return -1;
+	};
+
+	ph_offset = ehdr->e_phoff;
+	ph_num = ehdr->e_phnum;
+	ph_size = ehdr->e_phentsize;
+
+	printf("class: %d data: %d version: %d\r\n", ehdr->e_ident[EI_CLASS], ehdr->e_ident[EI_DATA], ehdr->e_ident[EI_VERSION]);
+	printf("type: %d machine: %d version: %d\r\n", ehdr->e_type, ehdr->e_machine, ehdr->e_version);
+	printf("phoff: %d phentsize: %d phnum: %d\r\n", ph_offset, ph_size, ph_num);
+	printf("entry: %x\r\n", ehdr->e_entry);
+
+	for (i=0;i<ph_num; i++) {
+		phdr = (Elf32_Phdr *)(buf + ph_offset + ph_size*i);
+		printf("  seg%d: type: %d offset: %d addr: %d fsize: %d msize: %d\r\n", i, 
+				phdr->p_type, 
+				phdr->p_offset, 
+				phdr->p_vaddr, 
+				phdr->p_filesz, 
+				phdr->p_memsz
+				);
+		if (phdr->p_type == 1) {
+			if (phdr->p_filesz > 0) {
+#define CHUNK_SIZE 32768
+				int chunk, to_read;
+				for (chunk=0; chunk < phdr->p_filesz; chunk+=CHUNK_SIZE) {
+					to_read = phdr->p_filesz - chunk;
+					if (to_read>CHUNK_SIZE) {
+						to_read = CHUNK_SIZE;
+					};
+					rc = f_lseek(&Fil,phdr->p_offset + chunk);
+					if (rc) {
+						xil_printf("f_seek: %d\r\n", rc);
+						return -1;
+					};
+					printf("    read %d bytes form %d to %d\r\n", to_read, phdr->p_offset+chunk, (phdr->p_vaddr + chunk));
+					rc = f_read(&Fil, (char *)(phdr->p_vaddr + chunk), to_read, &br);
+					if (rc) {
+						xil_printf("f_read: %d\r\n", rc);
+						return -1;
+					};
+				};
+			};
+			if (phdr->p_memsz>phdr->p_filesz) {
+				printf("    zero fill %d bytes at %d\r\n", phdr->p_memsz - phdr->p_filesz, phdr->p_vaddr + phdr->p_filesz);
+				memset((char *)(phdr->p_vaddr + phdr->p_filesz), 0, phdr->p_memsz - phdr->p_filesz);
+			};
+		};
+	};
+
+	/*
+	for (i=0;i<158000; i+= 16384) {
+		printf("%x:\r\n", i);
+		print_block((char *)i, 1024);
+	};
+	*/
+
+	printf("Start program at %d\r\n", ehdr->e_entry);
+	entry = (void (*)(void))(ehdr->e_entry);
+	entry();
   
 	return 0;
 }
