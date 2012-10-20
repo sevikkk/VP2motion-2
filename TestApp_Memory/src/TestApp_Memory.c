@@ -138,33 +138,24 @@ void osram_thread(void *unused)
 	XStatus s;
 
 	s = XSpi_Initialize(&Spi_OSRAM, XPAR_XPS_SPI_OSRAM_DEVICE_ID);
-	printf("1: %d\r\n", s);
 	s = XSpi_SetOptions(&Spi_OSRAM, XSP_MASTER_OPTION | XSP_MANUAL_SSELECT_OPTION);
-	printf("2: %d\r\n", s);
 	s = XSpi_Start(&Spi_OSRAM);
-	printf("3: %d\r\n", s);
 	XSpi_mIntrGlobalDisable(&Spi_OSRAM);
 	s = XSpi_SetSlaveSelect (&Spi_OSRAM,0);
-	printf("4: %d\r\n", s);
 
 	s = XSpi_SetSlaveSelect (&Spi_OSRAM,1);
-	printf("5: %d\r\n", s);
 	osram_buf[0] = 0x3;
 	s = XSpi_Transfer(&Spi_OSRAM, osram_buf, osram_buf2, 1);
-	printf("6: %d\r\n", s);
 	s = XSpi_SetSlaveSelect (&Spi_OSRAM,0);
-	printf("7: %d\r\n", s);
 
 	XSpi_SetSlaveSelect (&Spi_OSRAM,1);
 	osram_buf[0] = 0xf;
 	s = XSpi_Transfer(&Spi_OSRAM, osram_buf, osram_buf2, 1);
-	printf("8: %d\r\n", s);
 	XSpi_SetSlaveSelect (&Spi_OSRAM,0);
 
 	XSpi_SetSlaveSelect (&Spi_OSRAM,1);
 	osram_buf[0] = 0xc5;
 	s = XSpi_Transfer(&Spi_OSRAM, osram_buf, osram_buf2, 1);
-	printf("9: %d\r\n", s);
 	XSpi_SetSlaveSelect (&Spi_OSRAM,0);
 
 	for (;;) {
