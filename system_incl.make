@@ -87,7 +87,6 @@ implementation/jtagppc_cntlr_0_wrapper.ngc \
 implementation/plb0_wrapper.ngc \
 implementation/xps_bram_if_cntlr_1_wrapper.ngc \
 implementation/plb_bram_if_cntlr_1_bram_wrapper.ngc \
-implementation/rs232_wrapper.ngc \
 implementation/leds_wrapper.ngc \
 implementation/sdr_sdram_custom_wrapper.ngc \
 implementation/ppc405_0_iplb1_wrapper.ngc \
@@ -104,7 +103,8 @@ implementation/xps_spi_osram_wrapper.ngc \
 implementation/fit_timer_0_wrapper.ngc \
 implementation/osram_data_inv_wrapper.ngc \
 implementation/osram_clk_inv_wrapper.ngc \
-implementation/osram_load_inv_wrapper.ngc
+implementation/osram_load_inv_wrapper.ngc \
+implementation/rs232_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 

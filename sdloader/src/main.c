@@ -12,9 +12,21 @@
 #include "mmc.h"
 #include "osram.h"
 
+#include "xuartns550_l.h"
+
 #include "ff.h"
 #include "elf.h"
 #define printf xil_printf
+
+#define UART_BASEADDR   		XPAR_UARTNS550_0_BASEADDR
+#define UART_CLOCK            XPAR_UARTNS550_0_CLOCK_FREQ_HZ
+#define UART_BAUDRATE 			115200
+
+void init_uart (void) {
+   /* Initialize RS232_Uart_1 - Set baudrate and number of stop bits */
+   XUartNs550_SetBaud           (UART_BASEADDR, UART_CLOCK, UART_BAUDRATE);
+   XUartNs550_mSetLineControlReg(UART_BASEADDR, XUN_LCR_8_DATA_BITS);
+}
 
 const char osram_Boot[26] = {
         0x03, 0x0f,
@@ -29,6 +41,7 @@ char buf[MMC_BLOCK_SIZE];
 FATFS Fatfs;		/* File system object */
 FIL Fil;			/* File object */
 
+
 int main(void)
 {
 	XStatus s;
@@ -38,6 +51,7 @@ int main(void)
 	Elf32_Phdr *phdr;
 	int br, ph_offset, ph_num, ph_size;
 	void (*entry)(void);
+	init_uart();
 
 	print("\r\n\r\nStart\r\n");
 
