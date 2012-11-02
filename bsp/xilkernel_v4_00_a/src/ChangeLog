@@ -1,0 +1,63 @@
+Change Log for Xilkernel v4.00.a
+=================================
+
+2008-04-10
+
+	* data/xilkernel_v2_1_0.mld: Change description to remove
+	reference to OPB timer.
+	
+2008-02-20
+
+	* src/src/sys/alloc.c: Make kernel stack size equal to the greater
+	of 1024 bytes or pthread_stack_size. New stack start pointer
+	variable used to switch stacks in kernel entry routines.
+	* src/include/arch/<processor>/arch.h: Remove KERNEL_IRQ_STACKSZ
+	* src/src/arch/<processor>/entry<sub_type>.S: Load new stack
+	pointer from kernel_irq_stack_ptr rather than offset from label
+	kernel_irq_stack.
+	
+2007-10-22
+
+	* data/xilkernel_v2_1_0.mld: Change depends tag to standalone_v2_00_a.
+	
+2007-10-15
+
+	* Makefile_mb.sh: Fix regression with compiler used in kernel Make. Always 
+	use *-gcc
+
+	* timer.h: Add prototype for xget_clock_ticks
+
+2007-09-26  
+
+	* ktypes.h: Add new field 'remain' for storing process timeout information
+	
+	* process.c: When unblocking a process waiting on a timeout, store the
+	remaining timeout amount in the process data structure.
+
+	* semaphore.c: Add sys/timer.h to includes
+
+	* timer.c: Cleanup prototypes. Add new function to compute ticks_to_ms. 
+	Store timeout remaining in process data structure. Update to remove_tmr 
+	on 2007-09-11 was not sufficient. Since the previous scheme required an 
+	interrupt to deallocate removed timers. It could cause an application to 
+	run out of timers, before the next interrupt. Created new scheme, where
+	active_tmr lists are updated promptly upon a timer being deactivated. 
+
+	* xtrace.c/.h: New xtrace API for internal use. Minimally intrusive way
+	to instrument kernel and log events of interest. Log gets printed out 
+	later through debugger. Not available through MSS.
+	
+2007-09-19  
+	
+	* timer_intr_handler.c/<arch>-hw.c: Fix for bug where threads could starve 
+	because of the way we always used to refresh PIT timer. Now, when a thread 
+	receives only a partial tick, the timer is not refreshed and instead the 
+	thread receives one more full time quantum. cr=448047
+	
+2007-09-11 
+
+	* timer.c: Fix bug with timer handling of closely scheduled add/remove 
+	of timers. The changes make sure that no ghost timers are left in the
+	timer lists and there are no aliasing effects. cr=448047
+	
+

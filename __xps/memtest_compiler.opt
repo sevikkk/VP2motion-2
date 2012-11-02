@@ -1,0 +1,20 @@
+ppc405_0
+MEMTEST_SOURCES = memtest/src/TestApp_Memory.c 
+MEMTEST_HEADERS = 
+MEMTEST_CC = powerpc-eabi-gcc
+MEMTEST_CC_SIZE = powerpc-eabi-size
+MEMTEST_CC_OPT = -O2
+MEMTEST_CFLAGS = 
+MEMTEST_CC_SEARCH = # -B
+MEMTEST_LIBPATH = -L./ppc405_0/lib/ # -L
+MEMTEST_INCLUDES = -I./ppc405_0/include/ # -I
+MEMTEST_LFLAGS = # -l
+MEMTEST_LINKER_SCRIPT = memtest/memtest_linker_script.ld
+MEMTEST_CC_DEBUG_FLAG =  -g 
+MEMTEST_CC_PROFILE_FLAG = # -pg
+MEMTEST_CC_GLOBPTR_FLAG= # -msdata=eabi
+MEMTEST_CC_INFERRED_FLAGS= 
+MEMTEST_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_START_ADDR=
+MEMTEST_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
+MEMTEST_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
+                  $(MEMTEST_CC_INFERRED_FLAGS)  \

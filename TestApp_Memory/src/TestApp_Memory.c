@@ -118,11 +118,11 @@ void leds_thread(void *unused)
 {
 	int i = 0;
 
-	XGpio_Initialize(&Leds, XPAR_LEDS_DEVICE_ID);
-	XGpio_SetDataDirection(&Leds, 1, 0x0);
+	xil_printf("leds thread\r\n", i);
 
 	for (;;) {
 		XGpio_DiscreteWrite(&Leds, 1, i);
+		xil_printf("leds: %d\r\n", i);
 		sys_sleep(1000);
 		i++;
 	};
@@ -177,9 +177,15 @@ void osram_thread(void *unused)
 void *main_thread(void *unused)
 {
 	lwip_init();
-	sys_thread_new("NW_THREAD", network_thread, NULL, THREAD_STACKSIZE, 2);
+	/* sys_thread_new("NW_THREAD", network_thread, NULL, THREAD_STACKSIZE, 2); */
+	XGpio_Initialize(&Leds, XPAR_LEDS_DEVICE_ID);
+	XGpio_SetDataDirection(&Leds, 1, 0x0);
+	print("main: start1\r\n");
 	sys_thread_new("LEDS_THREAD", leds_thread, NULL, THREAD_STACKSIZE, 10);
-	sys_thread_new("OSRAM_THREAD", osram_thread, NULL, THREAD_STACKSIZE, 3);
+	sys_sleep(10);
+	print("main: start2\r\n");
+	sys_thread_new("LEDS_THREAD", leds_thread, NULL, THREAD_STACKSIZE, 10);
+	/* sys_thread_new("OSRAM_THREAD", osram_thread, NULL, THREAD_STACKSIZE, 3); */
 };
 
 int main(void)

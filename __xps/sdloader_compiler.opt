@@ -1,0 +1,20 @@
+ppc405_0
+SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c 
+SDLOADER_HEADERS = 
+SDLOADER_CC = powerpc-eabi-gcc
+SDLOADER_CC_SIZE = powerpc-eabi-size
+SDLOADER_CC_OPT = -O2
+SDLOADER_CFLAGS = 
+SDLOADER_CC_SEARCH = # -B
+SDLOADER_LIBPATH = -L./ppc405_0/lib/ # -L
+SDLOADER_INCLUDES = -I./ppc405_0/include/ # -I
+SDLOADER_LFLAGS = # -l
+SDLOADER_LINKER_SCRIPT = sdloader/sdloader_linker_script.ld
+SDLOADER_CC_DEBUG_FLAG =  -g 
+SDLOADER_CC_PROFILE_FLAG = # -pg
+SDLOADER_CC_GLOBPTR_FLAG= # -msdata=eabi
+SDLOADER_CC_INFERRED_FLAGS= 
+SDLOADER_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_START_ADDR=
+SDLOADER_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
+SDLOADER_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
+                  $(SDLOADER_CC_INFERRED_FLAGS)  \
