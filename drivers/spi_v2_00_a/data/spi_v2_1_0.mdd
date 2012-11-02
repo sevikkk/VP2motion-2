@@ -1,0 +1,29 @@
+###############################################################
+# Copyright (c) 2004-2008 Xilinx, Inc. All Rights Reserved.
+# You may copy and modify these files for your own internal use solely with
+# Xilinx programmable logic devices and  Xilinx EDK system or create IP
+# modules solely for Xilinx programmable logic devices and Xilinx EDK system.
+# No rights are granted to distribute any files unless they are distributed in
+# Xilinx programmable logic devices. 
+###############################################################
+OPTION psf_version = 2.1;
+
+BEGIN driver spi
+
+  OPTION supported_peripherals = (opb_spi xps_spi xps_insystem_flash);
+  OPTION driver_state = ACTIVE;
+  OPTION depends = (common_v1_00_a);
+  OPTION copyfiles = all;
+
+
+    BEGIN INTERFACE linux
+    END INTERFACE
+
+   BEGIN ARRAY interrupt_handler
+      PROPERTY desc = "Interrupt Handler Information";
+      PROPERTY size = 1, permit = none;
+      PARAM name = int_handler, default = XNullHandler, desc = "Name of Interrupt Handler", type = string;
+      PARAM name = int_port, default = IP2INTC_Irpt, desc = "Interrupt pin associated with the interrupt handler", permit = none;
+    END ARRAY
+
+END driver

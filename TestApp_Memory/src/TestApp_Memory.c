@@ -45,7 +45,7 @@
 #include "lwip/sys.h"
 #include "netif/xadapter.h"
 
-#define THREAD_STACKSIZE 16384
+#define THREAD_STACKSIZE 32768
 #define DEFAULT_THREAD_PRIORITY 1
 
 void print_ip(char *msg, struct ip_addr *ip)
@@ -138,15 +138,22 @@ void osram_thread(void *unused)
 	XStatus s;
 
 	s = XSpi_Initialize(&Spi_OSRAM, XPAR_XPS_SPI_OSRAM_DEVICE_ID);
+	xil_printf("s1: %d\r\n", s);
 	s = XSpi_SetOptions(&Spi_OSRAM, XSP_MASTER_OPTION | XSP_MANUAL_SSELECT_OPTION);
+	xil_printf("s2: %d\r\n", s);
 	s = XSpi_Start(&Spi_OSRAM);
+	xil_printf("s3: %d\r\n", s);
 	XSpi_mIntrGlobalDisable(&Spi_OSRAM);
 	s = XSpi_SetSlaveSelect (&Spi_OSRAM,0);
+	xil_printf("s4: %d\r\n", s);
 
 	s = XSpi_SetSlaveSelect (&Spi_OSRAM,1);
+	xil_printf("s5: %d\r\n", s);
 	osram_buf[0] = 0x3;
 	s = XSpi_Transfer(&Spi_OSRAM, osram_buf, osram_buf2, 1);
+	xil_printf("s6: %d\r\n", s);
 	s = XSpi_SetSlaveSelect (&Spi_OSRAM,0);
+	xil_printf("s7: %d\r\n", s);
 
 	XSpi_SetSlaveSelect (&Spi_OSRAM,1);
 	osram_buf[0] = 0xf;
@@ -185,7 +192,7 @@ void *main_thread(void *unused)
 	sys_sleep(10);
 	print("main: start2\r\n");
 	sys_thread_new("LEDS_THREAD", leds_thread, NULL, THREAD_STACKSIZE, 10);
-	/* sys_thread_new("OSRAM_THREAD", osram_thread, NULL, THREAD_STACKSIZE, 3); */
+	sys_thread_new("OSRAM_THREAD", osram_thread, NULL, THREAD_STACKSIZE, 3);
 };
 
 int main(void)

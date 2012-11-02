@@ -19,7 +19,7 @@ BEGIN OS
  PARAMETER config_named_sema = true
  PARAMETER config_time = true
  PARAMETER use_malloc = true
- PARAMETER pthread_stack_size = 16384
+ PARAMETER pthread_stack_size = 32768
  PARAMETER msgq_capacity = 100
  PARAMETER num_msgqs = 100
  PARAMETER max_sem_waitq = 100
