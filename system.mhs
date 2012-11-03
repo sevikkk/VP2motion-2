@@ -209,7 +209,7 @@ BEGIN xps_intc
  PARAMETER C_HIGHADDR = 0x8180ffff
  BUS_INTERFACE SPLB = plb0
  PORT Irq = EICC405EXTINPUTIRQ
- PORT Intr = xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt&xps_timer_0_Interrupt&xps_spi_sd_IP2INTC_Irpt&xps_spi_max_IP2INTC_Irpt&xps_spi_osram_IP2INTC_Irpt&fit_timer_0_Interrupt&RS232_IP2INTC_Irpt
+ PORT Intr = xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt&xps_timer_0_Interrupt&xps_spi_sd_IP2INTC_Irpt&xps_spi_max_IP2INTC_Irpt&xps_spi_osram_IP2INTC_Irpt&fit_timer_0_Interrupt&RS232_Interrupt
 END
 
 BEGIN xps_timebase_wdt
@@ -334,14 +334,16 @@ BEGIN util_vector_logic
  PORT Res = osram_load_inv_Res
 END
 
-BEGIN xps_uart16550
+BEGIN xps_uartlite
  PARAMETER INSTANCE = RS232
- PARAMETER HW_VER = 2.00.b
- PARAMETER C_BASEADDR = 0x83e00000
- PARAMETER C_HIGHADDR = 0x83e0ffff
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x84000000
+ PARAMETER C_HIGHADDR = 0x8400ffff
+ PARAMETER C_BAUDRATE = 115200
+ PARAMETER C_USE_PARITY = 0
  BUS_INTERFACE SPLB = plb0
- PORT IP2INTC_Irpt = RS232_IP2INTC_Irpt
- PORT sout = fpga_0_RS232_TX
- PORT sin = fpga_0_RS232_RX
+ PORT Interrupt = RS232_Interrupt
+ PORT TX = fpga_0_RS232_TX
+ PORT RX = fpga_0_RS232_RX
 END
 

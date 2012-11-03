@@ -110,7 +110,9 @@ int mmc_init(void)
   printf("send dummy clocks\r\n");
 
   /* Send some dummy clocks after GO_IDLE_STATE */
+  spi_receive_byte();
   SET_CS();
+  spi_receive_byte();
   spi_receive_byte();
   CLEAR_CS();
 
@@ -139,7 +141,9 @@ int mmc_init(void)
   printf("send dummy clocks\r\n");
 
   /* Send some dummy clocks after GO_IDLE_STATE */
+  spi_receive_byte();
   SET_CS();
+  spi_receive_byte();
   spi_receive_byte();
   CLEAR_CS();
 
@@ -164,7 +168,9 @@ int mmc_init(void)
     printf("CMD16 timeout\r\n");
   }
 
+  spi_receive_byte();
   SET_CS();
+  spi_receive_byte();
   spi_receive_byte();
 
   printf("mmc_init end\r\n");
