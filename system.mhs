@@ -35,9 +35,9 @@
  PORT SDRAM_DQ = SDRAM_DQ, DIR = IO, VEC = [31:0]
  PORT sys_clk_pin = dcm_clk_s, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  PORT sys_rst_pin = sys_rst_s, DIR = I, RST_POLARITY = 0, SIGIS = RST
- PORT PHY_tx_data = xps_ethernetlite_0_PHY_tx_data, DIR = O, VEC = [3:0]
- PORT PHY_tx_en = xps_ethernetlite_0_PHY_tx_en, DIR = O
- PORT PHY_rst_n = xps_ethernetlite_0_PHY_rst_n, DIR = O
+ PORT PHY_tx_data = net_gnd, DIR = O, VEC = [3:0]
+ PORT PHY_tx_en = net_gnd, DIR = O
+ PORT PHY_rst_n = net_vcc, DIR = O
  PORT PHY_rx_er = xps_ethernetlite_0_PHY_rx_er, DIR = I
  PORT PHY_col = xps_ethernetlite_0_PHY_col, DIR = I
  PORT PHY_rx_data = xps_ethernetlite_0_PHY_rx_data, DIR = I, VEC = [3:0]
@@ -64,7 +64,6 @@
 BEGIN ppc405
  PARAMETER INSTANCE = ppc405_0
  PARAMETER HW_VER = 3.00.a
- PARAMETER C_FASTEST_PLB_CLOCK = DPLB1
  BUS_INTERFACE DPLB0 = plb0
  BUS_INTERFACE IPLB0 = plb0
  BUS_INTERFACE JTAGPPC = jtagppc_cntlr_0_0
@@ -79,11 +78,11 @@ BEGIN jtagppc_cntlr
  PARAMETER INSTANCE = jtagppc_cntlr_0
  PARAMETER HW_VER = 2.01.c
  BUS_INTERFACE JTAGPPC0 = jtagppc_cntlr_0_0
+ BUS_INTERFACE JTAGPPC1 = jtagppc_cntlr_0_JTAGPPC1
 END
 
 BEGIN plb_v46
  PARAMETER INSTANCE = plb0
- PARAMETER C_DCR_INTFCE = 0
  PARAMETER C_NUM_CLK_PLB2OPB_REARB = 100
  PARAMETER HW_VER = 1.03.a
  PORT PLB_Clk = sys_clk_s
@@ -122,7 +121,7 @@ END
 BEGIN mpmc
  PARAMETER INSTANCE = SDR_SDRAM_CUSTOM
  PARAMETER HW_VER = 4.03.a
- PARAMETER C_NUM_PORTS = 2
+ PARAMETER C_NUM_PORTS = 4
  PARAMETER C_MEM_PARTNO = MT48LC8M16A2-75
  PARAMETER C_MEM_TYPE = SDRAM
  PARAMETER C_MEM_CE_WIDTH = 1
@@ -136,9 +135,13 @@ BEGIN mpmc
  PARAMETER C_MPMC_CTRL_HIGHADDR = 0x8300FFFF
  PARAMETER C_MPMC_BASEADDR = 0x00000000
  PARAMETER C_MPMC_HIGHADDR = 0x03ffffff
+ PARAMETER C_PIM2_BASETYPE = 2
+ PARAMETER C_PIM3_BASETYPE = 2
  BUS_INTERFACE SPLB0 = ppc405_0_iplb1
  BUS_INTERFACE SPLB1 = ppc405_0_dplb1
  BUS_INTERFACE MPMC_CTRL = plb0
+ BUS_INTERFACE SPLB2 = plb_v46_1
+ BUS_INTERFACE SPLB3 = plb_v46_0
  PORT SDRAM_Addr = fpga_0_SDR_SDRAM_CUSTOM_SDRAM_Addr
  PORT SDRAM_BankAddr = fpga_0_SDR_SDRAM_CUSTOM_SDRAM_BankAddr
  PORT SDRAM_CAS_n = fpga_0_SDR_SDRAM_CUSTOM_SDRAM_CAS_n
@@ -194,12 +197,12 @@ BEGIN proc_sys_reset
  PARAMETER HW_VER = 2.00.a
  PARAMETER C_EXT_RESET_HIGH = 0
  BUS_INTERFACE RESETPPC0 = ppc_reset_bus
+ BUS_INTERFACE RESETPPC1 = proc_sys_reset_0_RESETPPC1
  PORT Slowest_sync_clk = sys_clk_s
  PORT Dcm_locked = Dcm_all_locked
  PORT Ext_Reset_In = sys_rst_s
  PORT Bus_Struct_Reset = sys_bus_reset
  PORT Peripheral_Reset = sys_periph_reset
- PORT Aux_Reset_In = xps_timebase_wdt_0_WDT_Reset
 END
 
 BEGIN xps_intc
@@ -209,47 +212,7 @@ BEGIN xps_intc
  PARAMETER C_HIGHADDR = 0x8180ffff
  BUS_INTERFACE SPLB = plb0
  PORT Irq = EICC405EXTINPUTIRQ
- PORT Intr = xps_timebase_wdt_0_Timebase_Interrupt&xps_timebase_wdt_0_WDT_Interrupt&xps_ethernetlite_0_IP2INTC_Irpt&xps_timer_0_Interrupt&xps_spi_sd_IP2INTC_Irpt&xps_spi_max_IP2INTC_Irpt&xps_spi_osram_IP2INTC_Irpt&fit_timer_0_Interrupt&RS232_Interrupt
-END
-
-BEGIN xps_timebase_wdt
- PARAMETER INSTANCE = xps_timebase_wdt_0
- PARAMETER HW_VER = 1.00.b
- PARAMETER C_WDT_ENABLE_ONCE = 0
- PARAMETER C_BASEADDR = 0x83a00000
- PARAMETER C_HIGHADDR = 0x83a0ffff
- BUS_INTERFACE SPLB = plb0
- PORT WDT_Reset = xps_timebase_wdt_0_WDT_Reset
- PORT Timebase_Interrupt = xps_timebase_wdt_0_Timebase_Interrupt
- PORT WDT_Interrupt = xps_timebase_wdt_0_WDT_Interrupt
-END
-
-BEGIN xps_ethernetlite
- PARAMETER INSTANCE = xps_ethernetlite_0
- PARAMETER HW_VER = 2.00.b
- PARAMETER C_BASEADDR = 0x81000000
- PARAMETER C_HIGHADDR = 0x8100ffff
- BUS_INTERFACE SPLB = plb0
- PORT IP2INTC_Irpt = xps_ethernetlite_0_IP2INTC_Irpt
- PORT PHY_tx_data = xps_ethernetlite_0_PHY_tx_data
- PORT PHY_tx_en = xps_ethernetlite_0_PHY_tx_en
- PORT PHY_rst_n = xps_ethernetlite_0_PHY_rst_n
- PORT PHY_rx_er = xps_ethernetlite_0_PHY_rx_er
- PORT PHY_col = xps_ethernetlite_0_PHY_col
- PORT PHY_rx_data = xps_ethernetlite_0_PHY_rx_data
- PORT PHY_dv = xps_ethernetlite_0_PHY_dv
- PORT PHY_crs = xps_ethernetlite_0_PHY_crs
- PORT PHY_rx_clk = xps_ethernetlite_0_PHY_rx_clk
- PORT PHY_tx_clk = xps_ethernetlite_0_PHY_tx_clk
-END
-
-BEGIN xps_timer
- PARAMETER INSTANCE = xps_timer_0
- PARAMETER HW_VER = 1.00.a
- PARAMETER C_BASEADDR = 0x83c00000
- PARAMETER C_HIGHADDR = 0x83c0ffff
- BUS_INTERFACE SPLB = plb0
- PORT Interrupt = xps_timer_0_Interrupt
+ PORT Intr = xps_spi_sd_IP2INTC_Irpt & xps_spi_max_IP2INTC_Irpt & xps_spi_osram_IP2INTC_Irpt & RS232_Interrupt
 END
 
 BEGIN xps_spi
@@ -296,14 +259,6 @@ BEGIN xps_spi
  PORT IP2INTC_Irpt = xps_spi_osram_IP2INTC_Irpt
 END
 
-BEGIN fit_timer
- PARAMETER INSTANCE = fit_timer_0
- PARAMETER HW_VER = 1.01.a
- PORT Clk = sys_clk_s
- PORT Rst = net_gnd
- PORT Interrupt = fit_timer_0_Interrupt
-END
-
 BEGIN util_vector_logic
  PARAMETER INSTANCE = osram_data_inv
  PARAMETER HW_VER = 1.00.a
@@ -345,5 +300,54 @@ BEGIN xps_uartlite
  PORT Interrupt = RS232_Interrupt
  PORT TX = fpga_0_RS232_TX
  PORT RX = fpga_0_RS232_RX
+END
+
+BEGIN ppc405
+ PARAMETER INSTANCE = ppc405_1
+ PARAMETER HW_VER = 3.00.a
+ BUS_INTERFACE RESETPPC = proc_sys_reset_0_RESETPPC1
+ BUS_INTERFACE JTAGPPC = jtagppc_cntlr_0_JTAGPPC1
+ BUS_INTERFACE IPLB1 = plb_v46_0
+ BUS_INTERFACE DPLB1 = plb_v46_1
+ BUS_INTERFACE IPLB0 = plb_v46_2
+ BUS_INTERFACE DPLB0 = plb_v46_2
+ PORT CPMC405CLOCK = sys_clk_s
+END
+
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb_v46_0
+ PARAMETER HW_VER = 1.03.a
+ PORT SYS_Rst = sys_bus_reset
+ PORT PLB_Clk = sys_clk_s
+END
+
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb_v46_1
+ PARAMETER HW_VER = 1.03.a
+ PORT SYS_Rst = sys_bus_reset
+ PORT PLB_Clk = sys_clk_s
+END
+
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb_v46_2
+ PARAMETER HW_VER = 1.03.a
+ PORT SYS_Rst = sys_bus_reset
+ PORT PLB_Clk = sys_clk_s
+END
+
+BEGIN xps_bram_if_cntlr
+ PARAMETER INSTANCE = xps_bram_if_cntlr_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0xFFFE0000
+ PARAMETER C_HIGHADDR = 0xFFFFFFFF
+ PARAMETER C_SPLB_NATIVE_DWIDTH = 64
+ BUS_INTERFACE SPLB = plb_v46_2
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_0_PORTA
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = bram_block_0
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_0_PORTA
 END
 

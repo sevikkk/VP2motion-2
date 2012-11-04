@@ -36,9 +36,6 @@ MANAGE_FASTRT_OPTIONS = -reduce_fanout no
 
 OBSERVE_PAR_OPTIONS = -error yes
 
-TESTAPP_MEMORY_OUTPUT_DIR = TestApp_Memory
-TESTAPP_MEMORY_OUTPUT = $(TESTAPP_MEMORY_OUTPUT_DIR)/executable.elf
-
 MEMTEST_OUTPUT_DIR = memtest
 MEMTEST_OUTPUT = $(MEMTEST_OUTPUT_DIR)/executable.elf
 
@@ -52,10 +49,12 @@ BOOTLOOP_DIR = bootloops
 
 PPC405_0_BOOTLOOP = $(BOOTLOOP_DIR)/ppc405_0.elf
 
-BRAMINIT_ELF_FILES =  $(SDLOADER_OUTPUT) 
-BRAMINIT_ELF_FILE_ARGS =   -pe ppc405_0 $(SDLOADER_OUTPUT) 
+PPC405_1_BOOTLOOP = $(BOOTLOOP_DIR)/ppc405_1.elf
 
-ALL_USER_ELF_FILES = $(TESTAPP_MEMORY_OUTPUT) $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT) 
+BRAMINIT_ELF_FILES =  $(SDLOADER_OUTPUT)  $(PPC405_1_BOOTLOOP) 
+BRAMINIT_ELF_FILE_ARGS =   -pe ppc405_0 $(SDLOADER_OUTPUT)  -pe ppc405_1  $(PPC405_1_BOOTLOOP) 
+
+ALL_USER_ELF_FILES = $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT) 
 
 SIM_CMD = vsim
 
@@ -73,12 +72,13 @@ SIMGEN_OPTIONS = -p $(DEVICE) -lang $(LANGUAGE) $(SEARCHPATHOPT) $(BRAMINIT_ELF_
 
 
 LIBRARIES =  \
-       ppc405_0/lib/libxil.a 
+       ppc405_0/lib/libxil.a  \
+       ppc405_1/lib/libxil.a 
 VPEXEC = virtualplatform/vpexec
 
-LIBSCLEAN_TARGETS = ppc405_0_libsclean 
+LIBSCLEAN_TARGETS = ppc405_0_libsclean ppc405_1_libsclean 
 
-PROGRAMCLEAN_TARGETS = TestApp_Memory_programclean memtest_programclean sdloader_programclean 
+PROGRAMCLEAN_TARGETS = memtest_programclean sdloader_programclean 
 
 CORE_STATE_DEVELOPMENT_FILES = 
 
@@ -94,17 +94,19 @@ implementation/ppc405_0_dplb1_wrapper.ngc \
 implementation/clock_generator_0_wrapper.ngc \
 implementation/proc_sys_reset_0_wrapper.ngc \
 implementation/xps_intc_0_wrapper.ngc \
-implementation/xps_timebase_wdt_0_wrapper.ngc \
-implementation/xps_ethernetlite_0_wrapper.ngc \
-implementation/xps_timer_0_wrapper.ngc \
 implementation/xps_spi_sd_wrapper.ngc \
 implementation/xps_spi_max_wrapper.ngc \
 implementation/xps_spi_osram_wrapper.ngc \
-implementation/fit_timer_0_wrapper.ngc \
 implementation/osram_data_inv_wrapper.ngc \
 implementation/osram_clk_inv_wrapper.ngc \
 implementation/osram_load_inv_wrapper.ngc \
-implementation/rs232_wrapper.ngc
+implementation/rs232_wrapper.ngc \
+implementation/ppc405_1_wrapper.ngc \
+implementation/plb_v46_0_wrapper.ngc \
+implementation/plb_v46_1_wrapper.ngc \
+implementation/plb_v46_2_wrapper.ngc \
+implementation/xps_bram_if_cntlr_0_wrapper.ngc \
+implementation/bram_block_0_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 
@@ -127,36 +129,6 @@ XPLORER_DEPENDENCY = __xps/xplorer.opt
 XPLORER_OPTIONS = -p $(DEVICE) -uc $(SYSTEM).ucf -bm $(SYSTEM).bmm -max_runs 7
 
 FPGA_IMP_DEPENDENCY = $(BMM_FILE) $(POSTSYN_NETLIST) $(UCF_FILE) $(XFLOW_DEPENDENCY)
-
-#################################################################
-# SOFTWARE APPLICATION TESTAPP_MEMORY
-#################################################################
-
-TESTAPP_MEMORY_SOURCES = TestApp_Memory/src/TestApp_Memory.c 
-
-TESTAPP_MEMORY_HEADERS = 
-
-TESTAPP_MEMORY_CC = powerpc-eabi-gcc
-TESTAPP_MEMORY_CC_SIZE = powerpc-eabi-size
-TESTAPP_MEMORY_CC_OPT = -O2
-TESTAPP_MEMORY_CFLAGS = 
-TESTAPP_MEMORY_CC_SEARCH = # -B
-TESTAPP_MEMORY_LIBPATH = -L./ppc405_0/lib/ # -L
-TESTAPP_MEMORY_INCLUDES = -I./ppc405_0/include/ # -I
-TESTAPP_MEMORY_LFLAGS =   -llwip4 
-TESTAPP_MEMORY_LINKER_SCRIPT = TestApp_Memory/src/TestApp_Memory_LinkScr.ld
-TESTAPP_MEMORY_LINKER_SCRIPT_FLAG = -Wl,-T -Wl,$(TESTAPP_MEMORY_LINKER_SCRIPT) 
-TESTAPP_MEMORY_CC_DEBUG_FLAG =  -g 
-TESTAPP_MEMORY_CC_PROFILE_FLAG = # -pg
-TESTAPP_MEMORY_CC_GLOBPTR_FLAG= # -msdata=eabi
-TESTAPP_MEMORY_CC_INFERRED_FLAGS= 
-TESTAPP_MEMORY_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_START_ADDR=
-TESTAPP_MEMORY_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
-TESTAPP_MEMORY_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
-TESTAPP_MEMORY_OTHER_CC_FLAGS= $(TESTAPP_MEMORY_CC_GLOBPTR_FLAG)  \
-                  $(TESTAPP_MEMORY_CC_START_ADDR_FLAG) $(TESTAPP_MEMORY_CC_STACK_SIZE_FLAG) $(TESTAPP_MEMORY_CC_HEAP_SIZE_FLAG)  \
-                  $(TESTAPP_MEMORY_CC_INFERRED_FLAGS)  \
-                  $(TESTAPP_MEMORY_LINKER_SCRIPT_FLAG) $(TESTAPP_MEMORY_CC_DEBUG_FLAG) $(TESTAPP_MEMORY_CC_PROFILE_FLAG) 
 
 #################################################################
 # SOFTWARE APPLICATION MEMTEST
