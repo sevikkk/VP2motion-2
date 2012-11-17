@@ -97,13 +97,13 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library xps_uartlite_v1_00_a;
--- baudrate refered from xps_uartlite_v1_00_a
-use xps_uartlite_v1_00_a.baudrate;
--- uartlite_rx refered from xps_uartlite_v1_00_a
-use xps_uartlite_v1_00_a.uartlite_rx;
--- uartlite_tx refered from xps_uartlite_v1_00_a
-use xps_uartlite_v1_00_a.uartlite_tx;
+library xps_uartlite_v1_00_s;
+-- baudrate refered from xps_uartlite_v1_00_s
+use xps_uartlite_v1_00_s.baudrate;
+-- uartlite_rx refered from xps_uartlite_v1_00_s
+use xps_uartlite_v1_00_s.uartlite_rx;
+-- uartlite_tx refered from xps_uartlite_v1_00_s
+use xps_uartlite_v1_00_s.uartlite_tx;
 
 -------------------------------------------------------------------------------
 -- Port Declaration
@@ -240,7 +240,7 @@ begin  -- architecture IMP
     -------------------------------------------------------------------------
     -- BAUD_RATE_I : Instansiating the baudrate module
     -------------------------------------------------------------------------
-    BAUD_RATE_I : entity xps_uartlite_v1_00_a.baudrate
+    BAUD_RATE_I : entity xps_uartlite_v1_00_s.baudrate
         generic map
          (
           C_RATIO      => RATIO,
@@ -393,7 +393,7 @@ begin  -- architecture IMP
     -------------------------------------------------------------------------
     -- UARTLITE_RX_I : Instansiating the receive module
     -------------------------------------------------------------------------
-    UARTLITE_RX_I : entity xps_uartlite_v1_00_a.uartlite_rx
+    UARTLITE_RX_I : entity xps_uartlite_v1_00_s.uartlite_rx
       generic map
        (
         C_DATA_BITS      => C_DATA_BITS,
@@ -420,7 +420,7 @@ begin  -- architecture IMP
     -------------------------------------------------------------------------
     -- UARTLITE_TX_I : Instansiating the transmit module
     -------------------------------------------------------------------------
-    UARTLITE_TX_I : entity xps_uartlite_v1_00_a.uartlite_tx
+    UARTLITE_TX_I : entity xps_uartlite_v1_00_s.uartlite_tx
       generic map
        (
         C_DATA_BITS     => C_DATA_BITS,

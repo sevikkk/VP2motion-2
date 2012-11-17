@@ -52,7 +52,7 @@
 -------------------------------------------------------------------------------
 -- @BEGIN_CHANGELOG EDK_Jm
 --
---  Initial release of xps_uartlite_v1_00_a
+--  Initial release of xps_uartlite_v1_00_s
 --
 -- @END_CHANGELOG
 -------------------------------------------------------------------------------
@@ -113,9 +113,9 @@ library plbv46_slave_single_v1_00_a;
 -- plbv46_slave_single refered from plbv46_slave_single_v1_00_a
 use plbv46_slave_single_v1_00_a.plbv46_slave_single;
 
-library xps_uartlite_v1_00_a;
--- uartlite_core refered from xps_uartlite_v1_00_a
-use xps_uartlite_v1_00_a.uartlite_core;
+library xps_uartlite_v1_00_s;
+-- uartlite_core refered from xps_uartlite_v1_00_s
+use xps_uartlite_v1_00_s.uartlite_core;
 
 -------------------------------------------------------------------------------
 -- Port Declaration
@@ -387,7 +387,7 @@ begin  -- architecture IMP
     --------------------------------------------------------------------------
     -- Instansiating the UART core
     --------------------------------------------------------------------------
-    UARTLITE_CORE_I : entity xps_uartlite_v1_00_a.uartlite_core
+    UARTLITE_CORE_I : entity xps_uartlite_v1_00_s.uartlite_core
       generic map
        (
         C_DATA_BITS        => C_DATA_BITS,
