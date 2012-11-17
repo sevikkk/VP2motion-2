@@ -49,10 +49,8 @@ BOOTLOOP_DIR = bootloops
 
 PPC405_0_BOOTLOOP = $(BOOTLOOP_DIR)/ppc405_0.elf
 
-PPC405_1_BOOTLOOP = $(BOOTLOOP_DIR)/ppc405_1.elf
-
-BRAMINIT_ELF_FILES =  $(SDLOADER_OUTPUT)  $(PPC405_1_BOOTLOOP) 
-BRAMINIT_ELF_FILE_ARGS =   -pe ppc405_0 $(SDLOADER_OUTPUT)  -pe ppc405_1  $(PPC405_1_BOOTLOOP) 
+BRAMINIT_ELF_FILES =  $(SDLOADER_OUTPUT) 
+BRAMINIT_ELF_FILE_ARGS =   -pe ppc405_0 $(SDLOADER_OUTPUT) 
 
 ALL_USER_ELF_FILES = $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT) 
 
@@ -72,41 +70,35 @@ SIMGEN_OPTIONS = -p $(DEVICE) -lang $(LANGUAGE) $(SEARCHPATHOPT) $(BRAMINIT_ELF_
 
 
 LIBRARIES =  \
-       ppc405_0/lib/libxil.a  \
-       ppc405_1/lib/libxil.a 
+       ppc405_0/lib/libxil.a 
 VPEXEC = virtualplatform/vpexec
 
-LIBSCLEAN_TARGETS = ppc405_0_libsclean ppc405_1_libsclean 
+LIBSCLEAN_TARGETS = ppc405_0_libsclean 
 
 PROGRAMCLEAN_TARGETS = memtest_programclean sdloader_programclean 
 
 CORE_STATE_DEVELOPMENT_FILES = 
 
-WRAPPER_NGC_FILES = implementation/ppc405_0_wrapper.ngc \
-implementation/jtagppc_cntlr_0_wrapper.ngc \
-implementation/plb0_wrapper.ngc \
+WRAPPER_NGC_FILES = implementation/xps_spi_sd_wrapper.ngc \
+implementation/xps_spi_osram_wrapper.ngc \
+implementation/xps_spi_max_wrapper.ngc \
 implementation/xps_bram_if_cntlr_1_wrapper.ngc \
-implementation/plb_bram_if_cntlr_1_bram_wrapper.ngc \
-implementation/leds_wrapper.ngc \
-implementation/sdr_sdram_custom_wrapper.ngc \
+implementation/proc_sys_reset_0_wrapper.ngc \
 implementation/ppc405_0_iplb1_wrapper.ngc \
 implementation/ppc405_0_dplb1_wrapper.ngc \
-implementation/clock_generator_0_wrapper.ngc \
-implementation/proc_sys_reset_0_wrapper.ngc \
+implementation/ppc405_0_wrapper.ngc \
+implementation/plb_bram_if_cntlr_1_bram_wrapper.ngc \
+implementation/plb0_wrapper.ngc \
 implementation/xps_intc_0_wrapper.ngc \
-implementation/xps_spi_sd_wrapper.ngc \
-implementation/xps_spi_max_wrapper.ngc \
-implementation/xps_spi_osram_wrapper.ngc \
+implementation/osram_load_inv_wrapper.ngc \
 implementation/osram_data_inv_wrapper.ngc \
 implementation/osram_clk_inv_wrapper.ngc \
-implementation/osram_load_inv_wrapper.ngc \
+implementation/jtagppc_cntlr_0_wrapper.ngc \
+implementation/clock_generator_0_wrapper.ngc \
+implementation/sdr_sdram_custom_wrapper.ngc \
 implementation/rs232_wrapper.ngc \
-implementation/ppc405_1_wrapper.ngc \
-implementation/plb_v46_0_wrapper.ngc \
-implementation/plb_v46_1_wrapper.ngc \
-implementation/plb_v46_2_wrapper.ngc \
-implementation/xps_bram_if_cntlr_0_wrapper.ngc \
-implementation/bram_block_0_wrapper.ngc
+implementation/rs485_wrapper.ngc \
+implementation/leds_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 

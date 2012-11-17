@@ -26,15 +26,11 @@ FpgaImpMode: 0
 EnableParTimingError: 1
 EnableResetOptimization: 0
 ShowLicenseDialog: 1
-LockAddr: xps_bram_if_cntlr_0,C_BASEADDR
-LockAddr: xps_bram_if_cntlr_1,C_BASEADDR
+LockAddr: xps_bram_if_cntlr_0,C_BASEADDR,xps_bram_if_cntlr_1,C_BASEADDR
 ICacheAddr: SDR_SDRAM_CUSTOM,C_MPMC_BASEADDR
 DCacheAddr: SDR_SDRAM_CUSTOM,C_MPMC_BASEADDR
 Processor: ppc405_0
 BootLoop: 0
-XmdStub: 0
-Processor: ppc405_1
-BootLoop: 1
 XmdStub: 0
 SwProj: TestApp_Memory
 Processor: ppc405_0

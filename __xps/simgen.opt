@@ -1,1 +1,1 @@
- -p virtex2p -lang vhdl   $(PPC405_0_BOOTLOOP)  -s mti
+ -p virtex2p -lang vhdl   sdloader/executable.elf -s mti

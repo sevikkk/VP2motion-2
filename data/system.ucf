@@ -22,6 +22,12 @@ TIMESPEC "TS_RST1" = FROM CPUS THRU RST_GRP TO FFS  TIG;
 Net RS232_RX LOC=H16;
 Net RS232_TX LOC=J16;
 
+#### Module RS485 constraints
+
+Net RS485_RX LOC=N8;
+Net RS485_TX LOC=G15;
+Net RS485_DE LOC=F15;
+
 #### Module LEDS constraints
 
 Net LEDS_GPIO<0> LOC=G17;

@@ -144,9 +144,6 @@ $(LIBRARIES): $(MHSFILE) $(MSSFILE) __xps/libgen.opt
 ppc405_0_libsclean:
 	rm -rf ppc405_0/
 
-ppc405_1_libsclean:
-	rm -rf ppc405_1/
-
 #################################################################
 # SOFTWARE APPLICATION MEMTEST
 #################################################################
@@ -193,10 +190,6 @@ $(PPC405_0_BOOTLOOP): $(PPC405_BOOTLOOP)
 	@mkdir -p $(BOOTLOOP_DIR)
 	cp -f $(PPC405_BOOTLOOP) $(PPC405_0_BOOTLOOP)
 
-$(PPC405_1_BOOTLOOP): $(PPC405_BOOTLOOP)
-	@mkdir -p $(BOOTLOOP_DIR)
-	cp -f $(PPC405_BOOTLOOP) $(PPC405_1_BOOTLOOP)
-
 #################################################################
 # HARDWARE IMPLEMENTATION FLOW
 #################################################################
@@ -240,10 +233,11 @@ $(DOWNLOAD_BIT): $(SYSTEM_BIT) $(BRAMINIT_ELF_FILES) __xps/bitinit.opt
 	-bt $(SYSTEM_BIT) -o $(DOWNLOAD_BIT)
 	@rm -f $(SYSTEM)_bd.bmm
 
-$(SYSTEM_ACE):
-	@echo "In order to generate ace file, you must have:-"
-	@echo "- exactly one processor."
-	@echo "- opb_mdm, if using microblaze."
+$(SYSTEM_ACE): $(DOWNLOAD_BIT) $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT) 
+	@echo "*********************************************"
+	@echo "Creating system ace file"
+	@echo "*********************************************"
+	xmd -tcl genace.tcl -jprog -hw $(DOWNLOAD_BIT) -elf $(MEMTEST_OUTPUT) $(SDLOADER_OUTPUT)  -target ppc_hw  -ace $(SYSTEM_ACE)
 
 #################################################################
 # SIMULATION FLOW

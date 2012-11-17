@@ -1,1 +1,1 @@
-   $(PPC405_0_BOOTLOOP) 
+   sdloader/executable.elf
