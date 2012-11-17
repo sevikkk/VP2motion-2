@@ -168,7 +168,12 @@ entity motion is
   port
   (
     -- ADD USER PORTS BELOW THIS LINE ------------------
-    --USER ports added here
+    S_Dir                          : out std_logic;
+    S_Step                         : out std_logic;
+    S_Enable                       : out std_logic;
+    E_Min                          : in  std_logic;
+    E_Max                          : in  std_logic;
+    E_Probe                        : in  std_logic;
     -- ADD USER PORTS ABOVE THIS LINE ------------------
 
     -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -405,6 +410,12 @@ architecture IMP of motion is
     (
       -- ADD USER PORTS BELOW THIS LINE ------------------
       --USER ports added here
+      S_Dir                          : out std_logic;
+      S_Step                         : out std_logic;
+      S_Enable                       : out std_logic;
+      E_Min                          : in  std_logic;
+      E_Max                          : in  std_logic;
+      E_Probe                        : in  std_logic;
       -- ADD USER PORTS ABOVE THIS LINE ------------------
 
       -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -588,7 +599,12 @@ begin
     port map
     (
       -- MAP USER PORTS BELOW THIS LINE ------------------
-      --USER ports mapped here
+      S_Dir => S_Dir,
+      S_Step => S_Step,
+      S_Enable => S_Enable,
+      E_Min => E_Min ,
+      E_Max => E_Max,
+      E_Probe => E_Probe,
       -- MAP USER PORTS ABOVE THIS LINE ------------------
 
       Bus2IP_Clk                     => ipif_Bus2IP_Clk,

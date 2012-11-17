@@ -17,6 +17,7 @@ OPTION IP_GROUP = MICROBLAZE:PPC:USER
 OPTION DESC = MOTION
 OPTION LONG_DESC = CNC Motion Controller
 
+IO_INTERFACE IO_IF = motion_0, IO_TYPE = SEVA_MOTION
 
 ## Bus Interfaces
 BUS_INTERFACE BUS = SPLB, BUS_TYPE = SLAVE, BUS_STD = PLBV46
@@ -82,5 +83,12 @@ PORT Sl_MWrErr = Sl_MWrErr, DIR = O, VEC = [0:(C_SPLB_NUM_MASTERS-1)], BUS = SPL
 PORT Sl_MRdErr = Sl_MRdErr, DIR = O, VEC = [0:(C_SPLB_NUM_MASTERS-1)], BUS = SPLB
 PORT Sl_MIRQ = Sl_MIRQ, DIR = O, VEC = [0:(C_SPLB_NUM_MASTERS-1)], BUS = SPLB
 PORT IP2INTC_Irpt = "", DIR = O, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_HIGH
+
+PORT S_Dir = "", DIR = O, PERMIT = BASE_USER, DESC = 'stepper dir', IO_IF = motion_0, IO_IS = dir
+PORT S_Step = "", DIR = O, PERMIT = BASE_USER, DESC = 'stepper step', IO_IF = motion_0, IO_IS = step
+PORT S_Enable = "", DIR = O, PERMIT = BASE_USER, DESC = 'stepper enable', IO_IF = motion_0, IO_IS = enable
+PORT E_Min = "", DIR = I, PERMIT = BASE_USER, DESC = 'min endstop', IO_IF = motion_0, IO_IS = min_endstop
+PORT E_Max = "", DIR = I, PERMIT = BASE_USER, DESC = 'max endstop', IO_IF = motion_0, IO_IS = max_endstop
+PORT E_Probe = "", DIR = I, PERMIT = BASE_USER, DESC = 'probe', IO_IF = motion_0, IO_IS = probe
 
 END
