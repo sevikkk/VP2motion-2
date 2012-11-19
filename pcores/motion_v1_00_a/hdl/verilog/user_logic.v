@@ -52,6 +52,14 @@ module user_logic
 (
   // -- ADD USER PORTS BELOW THIS LINE ---------------
   // --USER ports added here 
+  S_Dir,
+  S_Step,
+  S_Enable,
+  E_Min,
+  E_Max,
+  E_Probe,
+  A_Step,
+  A_Load,
   // -- ADD USER PORTS ABOVE THIS LINE ---------------
 
   // -- DO NOT EDIT BELOW THIS LINE ------------------
@@ -88,6 +96,14 @@ parameter C_NUM_INTR                     = 4;
 
 // -- ADD USER PORTS BELOW THIS LINE -----------------
 // --USER ports added here 
+output S_Dir;
+output S_Step;
+output S_Enable;
+input  E_Min;
+input  E_Max;
+input  E_Probe;
+input  A_Step;
+input  A_Load;
 // -- ADD USER PORTS ABOVE THIS LINE -----------------
 
 // -- DO NOT EDIT BELOW THIS LINE --------------------
@@ -115,44 +131,47 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   // --USER nets declarations added here, as needed for user logic
 
   // Nets for user logic slave model s/w accessible register example
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg0;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg1;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg2;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg3;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg4;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg5;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg6;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg7;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg8;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg9;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg10;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg11;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg12;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg13;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg14;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg15;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg16;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg17;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg18;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg19;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg20;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg21;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg22;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg23;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg24;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg25;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg26;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg27;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg28;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg29;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg30;
-  reg        [0 : C_SLV_DWIDTH-1]           slv_reg31;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_cmd;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_xl;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_xh;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_v;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_a;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_j;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_dt;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_next_steps;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_pre_n;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_pulse_n;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_post_n;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_step_bit;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_xl;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_xh;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_v;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_a;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_j;
+  wire       [0 : C_SLV_DWIDTH-1]           stat_dt;
+  wire       [0 : C_SLV_DWIDTH-1]           stat_steps;
+  wire       [0 : C_SLV_DWIDTH-1]           stat_status;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_emin_xl;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_emin_xh;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_emax_xl;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_emax_xh;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_eprobe_xl;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_eprobe_xh;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_missed_steps;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_stop_delay;
+  reg        [0 : C_SLV_DWIDTH-1]           reg_probe_delay;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_min_bounce;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_max_bounce;
+  reg        [0 : C_SLV_DWIDTH-1]           stat_probe_bounce;
   wire       [0 : 31]                       slv_reg_write_sel;
   wire       [0 : 31]                       slv_reg_read_sel;
   reg        [0 : C_SLV_DWIDTH-1]           slv_ip2bus_data;
   wire                                      slv_read_ack;
   wire                                      slv_write_ack;
   integer                                   byte_index, bit_index;
+  wire                                      done;
+  wire                                      stopped;
+  wire													load;
 
   // --USER logic implementation added here
 
@@ -187,243 +206,247 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
 
       if ( Bus2IP_Reset == 1 )
         begin
-          slv_reg0 <= 0;
-          slv_reg1 <= 0;
-          slv_reg2 <= 0;
-          slv_reg3 <= 0;
-          slv_reg4 <= 0;
-          slv_reg5 <= 0;
-          slv_reg6 <= 0;
-          slv_reg7 <= 0;
-          slv_reg8 <= 0;
-          slv_reg9 <= 0;
-          slv_reg10 <= 0;
-          slv_reg11 <= 0;
-          slv_reg12 <= 0;
-          slv_reg13 <= 0;
-          slv_reg14 <= 0;
-          slv_reg15 <= 0;
-          slv_reg16 <= 0;
-          slv_reg17 <= 0;
-          slv_reg18 <= 0;
-          slv_reg19 <= 0;
-          slv_reg20 <= 0;
-          slv_reg21 <= 0;
-          slv_reg22 <= 0;
-          slv_reg23 <= 0;
-          slv_reg24 <= 0;
-          slv_reg25 <= 0;
-          slv_reg26 <= 0;
-          slv_reg27 <= 0;
-          slv_reg28 <= 0;
-          slv_reg29 <= 0;
-          slv_reg30 <= 0;
-          slv_reg31 <= 0;
+          reg_cmd <= 0;
+          reg_next_xl <= 0;
+          reg_next_xh <= 0;
+          reg_next_v <= 0;
+          reg_next_a <= 0;
+          reg_next_j <= 0;
+          reg_next_dt <= 0;
+          reg_next_steps <= 0;
+          reg_pre_n <= 0;
+          reg_pulse_n <= 0;
+          reg_post_n <= 0;
+          reg_step_bit <= 0;
+          // stat_xl <= 0;
+          // stat_xh <= 0;
+          // stat_v <= 0;
+          // stat_a <= 0;
+          // stat_j <= 0;
+          // stat_dt <= 0;
+          // stat_steps <= 0;
+          // stat_status <= 0;
+          // stat_emin_xl <= 0;
+          // stat_emin_xh <= 0;
+          // stat_emax_xl <= 0;
+          // stat_emax_xh <= 0;
+          // stat_eprobe_xl <= 0;
+          // stat_eprobe_xh <= 0;
+          // stat_missed_steps <= 0;
+          reg_stop_delay <= 0;
+          reg_probe_delay <= 0;
+          // stat_min_bounce <= 0;
+          // stat_max_bounce <= 0;
+          // stat_probe_bounce <= 0;
         end
       else
+       begin
         case ( slv_reg_write_sel )
           32'b10000000000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg0[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_cmd[bit_index] <= Bus2IP_Data[bit_index];
           32'b01000000000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg1[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_xl[bit_index] <= Bus2IP_Data[bit_index];
           32'b00100000000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg2[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_xh[bit_index] <= Bus2IP_Data[bit_index];
           32'b00010000000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg3[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_v[bit_index] <= Bus2IP_Data[bit_index];
           32'b00001000000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg4[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_a[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000100000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg5[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_j[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000010000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg6[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_dt[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000001000000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg7[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_next_steps[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000000100000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg8[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_pre_n[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000000010000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg9[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_pulse_n[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000000001000000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg10[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_post_n[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000000000100000000000000000000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg11[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000010000000000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg12[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000001000000000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg13[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000100000000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg14[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000010000000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg15[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000001000000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg16[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000100000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg17[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000010000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg18[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000001000000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg19[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000100000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg20[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000010000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg21[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000001000000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg22[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000100000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg23[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000010000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg24[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000001000000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg25[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000000100000 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg26[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_step_bit[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000010000000000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_xl[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000001000000000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_xh[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000100000000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_v[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000010000000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_a[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000001000000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_j[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000100000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_dt[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000010000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_steps[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000001000000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_status[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000100000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_emin_xl[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000010000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_emin_xh[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000001000000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_emax_xl[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000100000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_emax_xh[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000010000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_eprobe_xl[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000001000000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_eprobe_xh[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000000100000 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_missed_steps[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000000000000000000000000010000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg27[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_stop_delay[bit_index] <= Bus2IP_Data[bit_index];
           32'b00000000000000000000000000001000 :
             for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
               if ( Bus2IP_BE[byte_index] == 1 )
                 for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg28[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000000000100 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg29[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000000000010 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg30[bit_index] <= Bus2IP_Data[bit_index];
-          32'b00000000000000000000000000000001 :
-            for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
-              if ( Bus2IP_BE[byte_index] == 1 )
-                for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
-                  slv_reg31[bit_index] <= Bus2IP_Data[bit_index];
+                  reg_probe_delay[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000000000100 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_min_bounce[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000000000010 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_max_bounce[bit_index] <= Bus2IP_Data[bit_index];
+          // 32'b00000000000000000000000000000001 :
+          //   for ( byte_index = 0; byte_index <= (C_SLV_DWIDTH/8)-1; byte_index = byte_index+1 )
+          //     if ( Bus2IP_BE[byte_index] == 1 )
+          //       for ( bit_index = byte_index*8; bit_index <= byte_index*8+7; bit_index = bit_index+1 )
+          //         stat_probe_bounce[bit_index] <= Bus2IP_Data[bit_index];
           default : ;
         endcase
+        if ((slv_reg_write_sel != 32'b10000000000000000000000000000000) && (done || stopped))
+          reg_cmd <= 0;
+       end
 
     end // SLAVE_REG_WRITE_PROC
 
   // implement slave model register read mux
-  always @( slv_reg_read_sel or slv_reg0 or slv_reg1 or slv_reg2 or slv_reg3 or slv_reg4 or slv_reg5 or slv_reg6 or slv_reg7 or slv_reg8 or slv_reg9 or slv_reg10 or slv_reg11 or slv_reg12 or slv_reg13 or slv_reg14 or slv_reg15 or slv_reg16 or slv_reg17 or slv_reg18 or slv_reg19 or slv_reg20 or slv_reg21 or slv_reg22 or slv_reg23 or slv_reg24 or slv_reg25 or slv_reg26 or slv_reg27 or slv_reg28 or slv_reg29 or slv_reg30 or slv_reg31 )
+  always @( slv_reg_read_sel or reg_cmd or reg_next_xl or reg_next_xh or reg_next_v or reg_next_a or reg_next_j or reg_next_dt or reg_next_steps or reg_pre_n or reg_pulse_n or reg_post_n or reg_step_bit or stat_xl or stat_xh or stat_v or stat_a or stat_j or stat_dt or stat_steps or stat_status or stat_emin_xl or stat_emin_xh or stat_emax_xl or stat_emax_xh or stat_eprobe_xl or stat_eprobe_xh or stat_missed_steps or reg_stop_delay or reg_probe_delay or stat_min_bounce or stat_max_bounce or stat_probe_bounce )
     begin: SLAVE_REG_READ_PROC
 
       case ( slv_reg_read_sel )
-        32'b10000000000000000000000000000000 : slv_ip2bus_data <= slv_reg0;
-        32'b01000000000000000000000000000000 : slv_ip2bus_data <= slv_reg1;
-        32'b00100000000000000000000000000000 : slv_ip2bus_data <= slv_reg2;
-        32'b00010000000000000000000000000000 : slv_ip2bus_data <= slv_reg3;
-        32'b00001000000000000000000000000000 : slv_ip2bus_data <= slv_reg4;
-        32'b00000100000000000000000000000000 : slv_ip2bus_data <= slv_reg5;
-        32'b00000010000000000000000000000000 : slv_ip2bus_data <= slv_reg6;
-        32'b00000001000000000000000000000000 : slv_ip2bus_data <= slv_reg7;
-        32'b00000000100000000000000000000000 : slv_ip2bus_data <= slv_reg8;
-        32'b00000000010000000000000000000000 : slv_ip2bus_data <= slv_reg9;
-        32'b00000000001000000000000000000000 : slv_ip2bus_data <= slv_reg10;
-        32'b00000000000100000000000000000000 : slv_ip2bus_data <= slv_reg11;
-        32'b00000000000010000000000000000000 : slv_ip2bus_data <= slv_reg12;
-        32'b00000000000001000000000000000000 : slv_ip2bus_data <= slv_reg13;
-        32'b00000000000000100000000000000000 : slv_ip2bus_data <= slv_reg14;
-        32'b00000000000000010000000000000000 : slv_ip2bus_data <= slv_reg15;
-        32'b00000000000000001000000000000000 : slv_ip2bus_data <= slv_reg16;
-        32'b00000000000000000100000000000000 : slv_ip2bus_data <= slv_reg17;
-        32'b00000000000000000010000000000000 : slv_ip2bus_data <= slv_reg18;
-        32'b00000000000000000001000000000000 : slv_ip2bus_data <= slv_reg19;
-        32'b00000000000000000000100000000000 : slv_ip2bus_data <= slv_reg20;
-        32'b00000000000000000000010000000000 : slv_ip2bus_data <= slv_reg21;
-        32'b00000000000000000000001000000000 : slv_ip2bus_data <= slv_reg22;
-        32'b00000000000000000000000100000000 : slv_ip2bus_data <= slv_reg23;
-        32'b00000000000000000000000010000000 : slv_ip2bus_data <= slv_reg24;
-        32'b00000000000000000000000001000000 : slv_ip2bus_data <= slv_reg25;
-        32'b00000000000000000000000000100000 : slv_ip2bus_data <= slv_reg26;
-        32'b00000000000000000000000000010000 : slv_ip2bus_data <= slv_reg27;
-        32'b00000000000000000000000000001000 : slv_ip2bus_data <= slv_reg28;
-        32'b00000000000000000000000000000100 : slv_ip2bus_data <= slv_reg29;
-        32'b00000000000000000000000000000010 : slv_ip2bus_data <= slv_reg30;
-        32'b00000000000000000000000000000001 : slv_ip2bus_data <= slv_reg31;
+        32'b10000000000000000000000000000000 : slv_ip2bus_data <= reg_cmd;
+        32'b01000000000000000000000000000000 : slv_ip2bus_data <= reg_next_xl;
+        32'b00100000000000000000000000000000 : slv_ip2bus_data <= reg_next_xh;
+        32'b00010000000000000000000000000000 : slv_ip2bus_data <= reg_next_v;
+        32'b00001000000000000000000000000000 : slv_ip2bus_data <= reg_next_a;
+        32'b00000100000000000000000000000000 : slv_ip2bus_data <= reg_next_j;
+        32'b00000010000000000000000000000000 : slv_ip2bus_data <= reg_next_dt;
+        32'b00000001000000000000000000000000 : slv_ip2bus_data <= reg_next_steps;
+        32'b00000000100000000000000000000000 : slv_ip2bus_data <= reg_pre_n;
+        32'b00000000010000000000000000000000 : slv_ip2bus_data <= reg_pulse_n;
+        32'b00000000001000000000000000000000 : slv_ip2bus_data <= reg_post_n;
+        32'b00000000000100000000000000000000 : slv_ip2bus_data <= reg_step_bit;
+        32'b00000000000010000000000000000000 : slv_ip2bus_data <= stat_xl;
+        32'b00000000000001000000000000000000 : slv_ip2bus_data <= stat_xh;
+        32'b00000000000000100000000000000000 : slv_ip2bus_data <= stat_v;
+        32'b00000000000000010000000000000000 : slv_ip2bus_data <= stat_a;
+        32'b00000000000000001000000000000000 : slv_ip2bus_data <= stat_j;
+        32'b00000000000000000100000000000000 : slv_ip2bus_data <= stat_dt;
+        32'b00000000000000000010000000000000 : slv_ip2bus_data <= stat_steps;
+        32'b00000000000000000001000000000000 : slv_ip2bus_data <= stat_status;
+        32'b00000000000000000000100000000000 : slv_ip2bus_data <= stat_emin_xl;
+        32'b00000000000000000000010000000000 : slv_ip2bus_data <= stat_emin_xh;
+        32'b00000000000000000000001000000000 : slv_ip2bus_data <= stat_emax_xl;
+        32'b00000000000000000000000100000000 : slv_ip2bus_data <= stat_emax_xh;
+        32'b00000000000000000000000010000000 : slv_ip2bus_data <= stat_eprobe_xl;
+        32'b00000000000000000000000001000000 : slv_ip2bus_data <= stat_eprobe_xh;
+        32'b00000000000000000000000000100000 : slv_ip2bus_data <= stat_missed_steps;
+        32'b00000000000000000000000000010000 : slv_ip2bus_data <= reg_stop_delay;
+        32'b00000000000000000000000000001000 : slv_ip2bus_data <= reg_probe_delay;
+        32'b00000000000000000000000000000100 : slv_ip2bus_data <= stat_min_bounce;
+        32'b00000000000000000000000000000010 : slv_ip2bus_data <= stat_max_bounce;
+        32'b00000000000000000000000000000001 : slv_ip2bus_data <= stat_probe_bounce;
         default : slv_ip2bus_data <= 0;
       endcase
 
@@ -437,5 +460,21 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   assign IP2Bus_WrAck   = slv_write_ack;
   assign IP2Bus_RdAck   = slv_read_ack;
   assign IP2Bus_Error   = 0;
+
+	acc_step_gen acc_step_gen (
+    .clk(Bus2IP_Clk), 
+    .reset(Bus2IP_Reset), 
+    .dt_val(reg_next_dt), 
+    .steps_val(reg_next_steps), 
+    .load(load), 
+    .steps(stat_steps), 
+    .dt(stat_dt), 
+    .stopped(stopped), 
+    .step_stb(step_stb), 
+    .done(done)
+    );
+
+  assign stat_status[0] = stopped;
+  assign load = reg_cmd[31] && (done || stopped);
 
 endmodule

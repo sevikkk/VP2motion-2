@@ -174,6 +174,8 @@ entity motion is
     E_Min                          : in  std_logic;
     E_Max                          : in  std_logic;
     E_Probe                        : in  std_logic;
+    A_Step                         : in  std_logic;
+    A_Load                         : in  std_logic;
     -- ADD USER PORTS ABOVE THIS LINE ------------------
 
     -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -416,6 +418,8 @@ architecture IMP of motion is
       E_Min                          : in  std_logic;
       E_Max                          : in  std_logic;
       E_Probe                        : in  std_logic;
+      A_Step                         : in  std_logic;
+      A_Load                         : in  std_logic;
       -- ADD USER PORTS ABOVE THIS LINE ------------------
 
       -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -605,6 +609,8 @@ begin
       E_Min => E_Min ,
       E_Max => E_Max,
       E_Probe => E_Probe,
+      A_Step => A_Step,
+      A_Load => A_Load,
       -- MAP USER PORTS ABOVE THIS LINE ------------------
 
       Bus2IP_Clk                     => ipif_Bus2IP_Clk,

@@ -15,7 +15,7 @@ OPTION HDL = MIXED
 OPTION ARCH_SUPPORT_MAP = (OTHERS=DEVELOPMENT)
 OPTION IP_GROUP = MICROBLAZE:PPC:USER
 OPTION DESC = MOTION
-OPTION LONG_DESC = CNC Motion Controller
+OPTION LONG_DESC = CNC Motion Controller - Stepper driver
 
 IO_INTERFACE IO_IF = motion_0, IO_TYPE = SEVA_MOTION
 
@@ -90,5 +90,7 @@ PORT S_Enable = "", DIR = O, PERMIT = BASE_USER, DESC = 'stepper enable', IO_IF 
 PORT E_Min = "", DIR = I, PERMIT = BASE_USER, DESC = 'min endstop', IO_IF = motion_0, IO_IS = min_endstop
 PORT E_Max = "", DIR = I, PERMIT = BASE_USER, DESC = 'max endstop', IO_IF = motion_0, IO_IS = max_endstop
 PORT E_Probe = "", DIR = I, PERMIT = BASE_USER, DESC = 'probe', IO_IF = motion_0, IO_IS = probe
+PORT A_Step = "", DIR = I, PERMIT = BASE_USER, DESC = 'global acceleration step clock', IO_IF = motion_0, IO_IS = acc_step
+PORT A_Load = "", DIR = I, PERMIT = BASE_USER, DESC = 'global acceleration load', IO_IF = motion_0, IO_IS = acc_load
 
 END
