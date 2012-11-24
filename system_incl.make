@@ -77,7 +77,22 @@ LIBSCLEAN_TARGETS = ppc405_0_libsclean
 
 PROGRAMCLEAN_TARGETS = memtest_programclean sdloader_programclean 
 
-CORE_STATE_DEVELOPMENT_FILES = 
+CORE_STATE_DEVELOPMENT_FILES = /opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/proc_common_pkg.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/ipif_pkg.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/or_muxcy.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/or_gate128.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/family_support.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/pselect_f.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/counter_f.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v2_00_a/hdl/vhdl/soft_reset.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plbv46_slave_single_v1_00_a/hdl/vhdl/plb_address_decoder.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plbv46_slave_single_v1_00_a/hdl/vhdl/plb_slave_attachment.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/plbv46_slave_single_v1_00_a/hdl/vhdl/plbv46_slave_single.vhd \
+/opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/interrupt_control_v2_00_a/hdl/vhdl/interrupt_control.vhd \
+/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/motor_step_gen.v \
+/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/acc_step_gen.v \
+/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/user_logic.v \
+/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/vhdl/motion.vhd
 
 WRAPPER_NGC_FILES = implementation/xps_spi_sd_wrapper.ngc \
 implementation/xps_spi_osram_wrapper.ngc \
@@ -98,7 +113,10 @@ implementation/clock_generator_0_wrapper.ngc \
 implementation/sdr_sdram_custom_wrapper.ngc \
 implementation/rs232_wrapper.ngc \
 implementation/rs485_wrapper.ngc \
-implementation/leds_wrapper.ngc
+implementation/leds_wrapper.ngc \
+implementation/motion_x_wrapper.ngc \
+implementation/motion_y_wrapper.ngc \
+implementation/motion_z_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 

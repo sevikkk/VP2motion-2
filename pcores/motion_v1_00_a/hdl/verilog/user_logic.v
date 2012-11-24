@@ -174,6 +174,7 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   wire                                      done;
   wire                                      stopped;
   wire													load;
+  wire													missed;
 
   // --USER logic implementation added here
 
@@ -459,7 +460,7 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   // ------------------------------------------------------------
 
   always @(slv_ip2bus_data)
-    for ( bit_index = 0; bit_index <= C_SLV_DWIDTH; bit_index = bit_index+1 )
+    for ( bit_index = 0; bit_index < C_SLV_DWIDTH; bit_index = bit_index+1 )
 	    IP2Bus_Data[bit_index] <= slv_ip2bus_data[bit_index];
 		 
   assign IP2Bus_WrAck   = slv_write_ack;
@@ -482,5 +483,28 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   assign stat_status[0] = stopped;
   assign stat_status[31:1] = 0;
   assign load = reg_cmd[0] && (done || stopped);
+  
+	motor_step_gen motor_step_gen (
+    .clk(Bus2IP_Clk), 
+    .reset(Bus2IP_Reset), 
+    .pre_n(10), 
+    .pulse_n(30), 
+    .post_n(40), 
+    .step_stb(step_stb), 
+    .step_dir(1), 
+    .step(S_Step), 
+    .dir(S_Dir), 
+    .missed(missed)
+    );
+	 
+  always @(posedge Bus2IP_Clk)
+	begin
+		if (Bus2IP_Reset)
+			stat_missed_steps <= 0;
+		else if (slv_reg_write_sel == 32'b00000000000000000000000000100000)
+			stat_missed_steps <= 0;
+		else if (missed)
+			stat_missed_steps <= stat_missed_steps + 1;
+	end
 
 endmodule

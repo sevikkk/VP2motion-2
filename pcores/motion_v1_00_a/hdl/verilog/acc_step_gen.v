@@ -76,7 +76,6 @@ always @(load, dt_limit, steps_limit, steps, dt, reset, stopped)
 			begin
 				next_steps <= steps;
 				next_dt <= dt + 1;
-				step_stb <= #3 0;
 				next_stopped <= 0;
 				if (dt >= dt_limit - 1)
 					begin
