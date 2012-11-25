@@ -78,6 +78,7 @@ Source: sdloader/src/osram.c
 Source: sdloader/src/diskio.c
 Source: sdloader/src/ff.c
 Source: sdloader/src/unicode.c
+Source: sdloader/src/cmdline.c
 DefaultInit: executable
 InitBram: 1
 Active: 1

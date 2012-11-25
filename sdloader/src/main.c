@@ -5,6 +5,7 @@
 
 #include "xutil.h"
 #include "xstatus.h"
+#include "xuartlite_l.h"
 
 #include <sys/types.h>
 #include <inttypes.h>
@@ -15,6 +16,7 @@
 #include "ff.h"
 #include "elf.h"
 #define printf xil_printf
+#include "cmdline.h"
 
 const char osram_Boot[26] = {
         0x03, 0x0f,
@@ -29,8 +31,7 @@ char buf[MMC_BLOCK_SIZE];
 FATFS Fatfs;		/* File system object */
 FIL Fil;			/* File object */
 
-
-int main(void)
+int bootelf(void)
 {
 	XStatus s;
 	FRESULT rc;				/* Result code */
@@ -39,33 +40,6 @@ int main(void)
 	Elf32_Phdr *phdr;
 	int br, ph_offset, ph_num, ph_size;
 	void (*entry)(void);
-
-	print("\r\n\r\nStart\r\n");
-
-	s = osram_init();
-	if (s != XST_SUCCESS) {
-		xil_printf("osram_init: %d\r\n", s);
-		return -1;
-	};
-	
-	for (i=0; i<26; i++) {
-		osram_send(osram_Boot[i]);
-	};
-
-	s = mmc_if_init();
-	if (s != XST_SUCCESS) {
-		xil_printf("mmc_if_init: %d\r\n", s);
-		return -1;
-	};
-
-  /* Init the MMC */
-  /* s = mmc_init();
-	if (s != XST_SUCCESS) {
-		xil_printf("mmc_init: %d\r\n", s);
-		return -1;
-	};
-*/
-
 	
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
@@ -152,5 +126,61 @@ int main(void)
 	entry = (void (*)(void))(ehdr->e_entry);
 	entry();
   
+	return 0;
+}
+
+void
+do_help(void) {
+        printf("Commands:\r\n"
+                " help           - this help\r\n"
+                " bootelf        - start boot.elf\r\n"
+                "\r\n"
+        );
+}
+
+
+void
+do_bootelf(void) {
+	bootelf();
+}
+
+int main(void)
+{
+	XStatus s;
+	FRESULT rc;				/* Result code */
+	int i;
+
+	print("\r\n\r\nStart\r\n");
+
+	s = osram_init();
+	if (s != XST_SUCCESS) {
+		xil_printf("osram_init: %d\r\n", s);
+		return -1;
+	};
+	
+	for (i=0; i<26; i++) {
+		osram_send(osram_Boot[i]);
+	};
+
+	s = mmc_if_init();
+	if (s != XST_SUCCESS) {
+		xil_printf("mmc_if_init: %d\r\n", s);
+		return -1;
+	};
+
+	/* boot_elf(); */
+	cmdlineInit();
+	cmdlineAddCommand("help", do_help);
+	cmdlineAddCommand("?", do_help);
+	cmdlineAddCommand("bootelf", do_bootelf);
+
+	cmdlinePrintPrompt();
+	while (1) {
+		if (!XUartLite_mIsReceiveEmpty(STDIN_BASEADDRESS)) {
+			cmdlineInputFunc(XUartLite_mReadReg(STDIN_BASEADDRESS, XUL_RX_FIFO_OFFSET));
+		};
+		cmdlineMainLoop();
+	};
+
 	return 0;
 }
