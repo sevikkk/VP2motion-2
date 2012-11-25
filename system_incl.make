@@ -94,29 +94,29 @@ CORE_STATE_DEVELOPMENT_FILES = /opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcor
 /home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/user_logic.v \
 /home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/vhdl/motion.vhd
 
-WRAPPER_NGC_FILES = implementation/xps_spi_sd_wrapper.ngc \
-implementation/xps_spi_osram_wrapper.ngc \
-implementation/xps_spi_max_wrapper.ngc \
-implementation/xps_bram_if_cntlr_1_wrapper.ngc \
+WRAPPER_NGC_FILES = implementation/ppc405_0_wrapper.ngc \
 implementation/proc_sys_reset_0_wrapper.ngc \
-implementation/ppc405_0_iplb1_wrapper.ngc \
-implementation/ppc405_0_dplb1_wrapper.ngc \
-implementation/ppc405_0_wrapper.ngc \
-implementation/plb_bram_if_cntlr_1_bram_wrapper.ngc \
-implementation/plb0_wrapper.ngc \
-implementation/xps_intc_0_wrapper.ngc \
-implementation/osram_load_inv_wrapper.ngc \
-implementation/osram_data_inv_wrapper.ngc \
-implementation/osram_clk_inv_wrapper.ngc \
 implementation/jtagppc_cntlr_0_wrapper.ngc \
 implementation/clock_generator_0_wrapper.ngc \
+implementation/ppc405_0_iplb1_wrapper.ngc \
+implementation/ppc405_0_dplb1_wrapper.ngc \
+implementation/plb0_wrapper.ngc \
 implementation/sdr_sdram_custom_wrapper.ngc \
+implementation/xps_bram_if_cntlr_1_wrapper.ngc \
+implementation/plb_bram_if_cntlr_1_bram_wrapper.ngc \
+implementation/xps_intc_0_wrapper.ngc \
 implementation/rs232_wrapper.ngc \
 implementation/rs485_wrapper.ngc \
 implementation/leds_wrapper.ngc \
+implementation/xps_spi_sd_wrapper.ngc \
+implementation/xps_spi_osram_wrapper.ngc \
+implementation/xps_spi_max_wrapper.ngc \
 implementation/motion_x_wrapper.ngc \
 implementation/motion_y_wrapper.ngc \
-implementation/motion_z_wrapper.ngc
+implementation/motion_z_wrapper.ngc \
+implementation/osram_load_inv_wrapper.ngc \
+implementation/osram_data_inv_wrapper.ngc \
+implementation/osram_clk_inv_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 
