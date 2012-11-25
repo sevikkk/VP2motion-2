@@ -50,7 +50,7 @@
 #define CMDLINE_MAX_COMMANDS 30
 #define CMDLINE_MAX_CMD_LENGTH 50
 #define CMDLINE_BUFFERSIZE 50
-#define CMDLINE_HISTORYSIZE 1
+#define CMDLINE_HISTORYSIZE 5
 
 /* long strtol(const char * nptr, char ** endptr, int base); */
 
@@ -74,6 +74,9 @@ uint8_t CmdlineBufferLength;
 uint8_t CmdlineBufferEditPos;
 uint8_t CmdlineInputVT100State;
 uint8_t CmdlineHistory[CMDLINE_HISTORYSIZE][CMDLINE_BUFFERSIZE];
+int8_t CmdlineHistoryIdx;
+uint8_t CmdlineHistoryCnt;
+uint8_t CmdlineHistoryCopy;
 CmdlineFuncPtrType CmdlineExecFunction;
 
 // Functions
@@ -94,6 +97,9 @@ void cmdlineInit(void)
 	CmdlineExecFunction = 0;
 	// initialize command list
 	CmdlineNumCommands = 0;
+	CmdlineHistoryIdx = -1;
+	CmdlineHistoryCnt = 0;
+	CmdlineHistoryCopy = 0;
 }
 
 void cmdlineAddCommand(uint8_t* newCmdString, CmdlineFuncPtrType newCmdFuncPtr)
@@ -195,6 +201,7 @@ void cmdlineInputFunc(unsigned char c)
 				CmdlineBuffer[CmdlineBufferEditPos++] = c;
 				// update buffer length
 				CmdlineBufferLength++;
+				CmdlineHistoryCopy = 1;
 			} else {
 				cmdlineOutputFunc(ASCII_BEL);
 			};
@@ -215,6 +222,7 @@ void cmdlineInputFunc(unsigned char c)
 				// reposition cursor
 				for(i=CmdlineBufferEditPos; i<CmdlineBufferLength; i++)
 					cmdlineOutputFunc(ASCII_BS);
+				CmdlineHistoryCopy = 1;
 			} else {
 				cmdlineOutputFunc(ASCII_BEL);
 			};
@@ -235,6 +243,8 @@ void cmdlineInputFunc(unsigned char c)
 		// reset buffer
 		CmdlineBufferLength = 0;
 		CmdlineBufferEditPos = 0;
+		CmdlineHistoryCopy = 0;
+		CmdlineHistoryIdx = -1;
 	}
 	else if(c == ASCII_DEL)
 	{
@@ -295,6 +305,9 @@ void cmdlineRepaint(void)
 	cmdlineOutputFunc(ASCII_CR);
 	// print fresh prompt
 	cmdlinePrintPrompt();
+	cmdlineOutputFunc(27);
+	cmdlineOutputFunc('[');
+	cmdlineOutputFunc('K');
 	// print the new command line buffer
 	i = CmdlineBufferLength;
 	ptr = CmdlineBuffer;
@@ -307,19 +320,37 @@ void cmdlineDoHistory(uint8_t action)
 	{
 	case CMDLINE_HISTORY_SAVE:
 		// copy CmdlineBuffer to history if not null string
-		if( strlen(CmdlineBuffer) )
+		if( strlen(CmdlineBuffer) && CmdlineHistoryCopy) {
+			int i;
+			if (CmdlineHistoryCnt >= CMDLINE_HISTORYSIZE)
+				CmdlineHistoryCnt = CMDLINE_HISTORYSIZE - 1;
+
+			for (i = CmdlineHistoryCnt; i>0; i--) {
+				strcpy(CmdlineHistory[i], CmdlineHistory[i-1]);
+			};
 			strcpy(CmdlineHistory[0], CmdlineBuffer);
+			CmdlineHistoryCnt++;
+		};
 		break;
+	case CMDLINE_HISTORY_NEXT:
+		CmdlineHistoryIdx-= 2;
 	case CMDLINE_HISTORY_PREV:
+		CmdlineHistoryIdx++;
+
+		if (CmdlineHistoryIdx >= CmdlineHistoryCnt - 1)
+			CmdlineHistoryIdx = CmdlineHistoryCnt - 1;
+
+		if (CmdlineHistoryIdx < 0)
+			CmdlineHistoryIdx = 0;
+
 		// copy history to current buffer
-		strcpy(CmdlineBuffer, CmdlineHistory[0]);
+		strcpy(CmdlineBuffer, CmdlineHistory[CmdlineHistoryIdx]);
 		// set the buffer position to the end of the line
 		CmdlineBufferLength = strlen(CmdlineBuffer);
 		CmdlineBufferEditPos = CmdlineBufferLength;
 		// "re-paint" line
 		cmdlineRepaint();
-		break;
-	case CMDLINE_HISTORY_NEXT:
+		CmdlineHistoryCopy = 0;
 		break;
 	}
 }
