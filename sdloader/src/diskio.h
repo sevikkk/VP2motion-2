@@ -7,39 +7,36 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+
+#endif				/*  */
 
 #define _USE_WRITE	0	/* 1: Enable disk_write function */
 #define _USE_IOCTL	0	/* 1: Enable disk_ioctl fucntion */
 
 #include "integer.h"
 
-
 /* Status of Disk Functions */
-typedef BYTE	DSTATUS;
+	typedef BYTE DSTATUS;
 
 /* Results of Disk Functions */
-typedef enum {
-	RES_OK = 0,		/* 0: Successful */
-	RES_ERROR,		/* 1: R/W Error */
-	RES_WRPRT,		/* 2: Write Protected */
-	RES_NOTRDY,		/* 3: Not Ready */
-	RES_PARERR		/* 4: Invalid Parameter */
-} DRESULT;
-
+	typedef enum { RES_OK = 0,	/* 0: Successful */
+		RES_ERROR,	/* 1: R/W Error */
+		RES_WRPRT,	/* 2: Write Protected */
+		RES_NOTRDY,	/* 3: Not Ready */
+		RES_PARERR	/* 4: Invalid Parameter */
+	} DRESULT;
 
 /*---------------------------------------*/
 /* Prototypes for disk control functions */
+	DSTATUS disk_initialize(BYTE);
+	DSTATUS disk_status(BYTE);
+	DRESULT disk_read(BYTE, BYTE *, DWORD, BYTE);
 
-
-DSTATUS disk_initialize (BYTE);
-DSTATUS disk_status (BYTE);
-DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
 #if 0
-DRESULT disk_write (BYTE, const BYTE*, DWORD, BYTE);
-DRESULT disk_ioctl (BYTE, BYTE, void*);
-#endif
+	DRESULT disk_write(BYTE, const BYTE *, DWORD, BYTE);
+	DRESULT disk_ioctl(BYTE, BYTE, void *);
 
+#endif				/*  */
 
 /* Disk Status Bits (DSTATUS) */
 #define STA_NOINIT		0x01	/* Drive not initialized */
@@ -74,17 +71,15 @@ DRESULT disk_ioctl (BYTE, BYTE, void*);
 #define ATA_GET_MODEL		21	/* Get model name */
 #define ATA_GET_SN			22	/* Get serial number */
 
-
 /* MMC card type flags (MMC_GET_TYPE) */
-#define CT_MMC		0x01		/* MMC ver 3 */
-#define CT_SD1		0x02		/* SD ver 1 */
-#define CT_SD2		0x04		/* SD ver 2 */
+#define CT_MMC		0x01	/* MMC ver 3 */
+#define CT_SD1		0x02	/* SD ver 1 */
+#define CT_SD2		0x04	/* SD ver 2 */
 #define CT_SDC		(CT_SD1|CT_SD2)	/* SD */
-#define CT_BLOCK	0x08		/* Block addressing */
-#endif
+#define CT_BLOCK	0x08	/* Block addressing */
+#endif				/*  */
 
 #ifdef __cplusplus
 }
-#endif
-
-#endif
+#endif				/*  */
+#endif				/*  */

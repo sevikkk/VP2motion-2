@@ -10,8 +10,8 @@
 #include "cc949.c"
 #elif _CODE_PAGE == 950
 #include "cc950.c"
-#else
+#else				/*  */
 #include "ccsbcs.c"
-#endif
+#endif				/*  */
 
-#endif
+#endif				/*  */

@@ -16,18 +16,14 @@
 /* Definitions of physical drive number for each media */
 #define SD		0
 
-
 /*-----------------------------------------------------------------------*/
 /* Inidialize a Drive                                                    */
 /*-----------------------------------------------------------------------*/
-
-DSTATUS disk_initialize (
-	BYTE drv				/* Physical drive nmuber (0..) */
-)
+DSTATUS disk_initialize(BYTE drv	/* Physical drive nmuber (0..) */
+    )
 {
 	DSTATUS stat;
 	int result;
-
 	switch (drv) {
 	case SD:
 		result = mmc_init();
@@ -36,47 +32,40 @@ DSTATUS disk_initialize (
 	return STA_NOINIT;
 }
 
-
-
 /*-----------------------------------------------------------------------*/
 /* Get Disk Status                                                       */
 /*-----------------------------------------------------------------------*/
-
-DSTATUS disk_status (
-	BYTE drv		/* Physical drive nmuber (0..) */
-)
+DSTATUS disk_status(BYTE drv	/* Physical drive nmuber (0..) */
+    )
 {
 	return 0;
 }
 
-
-
 /*-----------------------------------------------------------------------*/
 /* Read Sector(s)                                                        */
 /*-----------------------------------------------------------------------*/
-
-DRESULT disk_read (
-	BYTE drv,		/* Physical drive nmuber (0..) */
-	BYTE *buff,		/* Data buffer to store read data */
-	DWORD sector,	/* Sector address (LBA) */
-	BYTE count		/* Number of sectors to read (1..128) */
-)
+DRESULT disk_read(BYTE drv,	/* Physical drive nmuber (0..) */
+		  BYTE * buff,	/* Data buffer to store read data */
+		  DWORD sector,	/* Sector address (LBA) */
+		  BYTE count	/* Number of sectors to read (1..128) */
+    )
 {
 	int result, i;
-
 	switch (drv) {
-	case SD :
+	case SD:
+
 		// translate the arguments here
 		//xil_printf("readblock: %d %d\r\n",sector, count);
-		for (i=0; i<count; i++) {
-			result = mmc_read_block(sector + i, buff + MMC_BLOCK_SIZE*i);
+		for (i = 0; i < count; i++) {
+			result =
+			    mmc_read_block(sector + i,
+					   buff + MMC_BLOCK_SIZE * i);
 			if (result != 0)
 				return RES_ERROR;
 		};
-		//print_block(buff, count*MMC_BLOCK_SIZE);
 
+		//print_block(buff, count*MMC_BLOCK_SIZE);
 		return RES_OK;
 	}
 	return RES_PARERR;
 }
-
