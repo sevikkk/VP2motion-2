@@ -50,7 +50,7 @@
 #define CMDLINE_MAX_COMMANDS 30
 #define CMDLINE_MAX_CMD_LENGTH 50
 #define CMDLINE_BUFFERSIZE 50
-#define CMDLINE_HISTORYSIZE 5
+#define CMDLINE_HISTORYSIZE 10
 
 /* long strtol(const char * nptr, char ** endptr, int base); */
 
@@ -305,7 +305,7 @@ void cmdlineRepaint(void)
 	cmdlineOutputFunc(ASCII_CR);
 	// print fresh prompt
 	cmdlinePrintPrompt();
-	cmdlineOutputFunc(27);
+	cmdlineOutputFunc(ASCII_ESC);
 	cmdlineOutputFunc('[');
 	cmdlineOutputFunc('K');
 	// print the new command line buffer
