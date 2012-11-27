@@ -18,5 +18,6 @@ lib proc_common_v2_00_a soft_reset vhdl
 lib interrupt_control_v2_00_a interrupt_control vhdl
 lib motion_v1_00_a motor_step_gen verilog
 lib motion_v1_00_a acc_step_gen verilog
+lib motion_v1_00_a acc_profile_gen verilog
 lib motion_v1_00_a user_logic verilog
 lib motion_v1_00_a motion vhdl
