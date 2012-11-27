@@ -27,25 +27,24 @@ module acc_profile_gen(
     input set_v,
     input set_a,
     input set_j,
-    input [63:0] x_val,
-    input [31:0] v_val,
-    input [31:0] a_val,
-    input [31:0] j_val,
+    input signed [63:0] x_val,
+    input signed [31:0] v_val,
+    input signed [31:0] a_val,
+    input signed [31:0] j_val,
     input [5:0] step_bit,
 	 
-	 output reg [63:0] x,
-	 output reg [31:0] v,
-	 output reg [31:0] a,
-	 output reg [31:0] j,
+	 output reg signed [63:0] x,
+	 output reg signed [31:0] v,
+	 output reg signed [31:0] a,
+	 output reg signed [31:0] j,
 	 
 	 output reg step,
 	 output reg dir
- 
-    );
+);
 	 
-reg [31:0] next_v;
-reg [31:0] next_a;
-reg [31:0] next_j;
+reg signed [31:0] next_v;
+reg signed [31:0] next_a;
+reg signed [31:0] next_j;
 
 always @(reset, acc_step, load, set_v, set_a, set_j, v_val, a_val, j_val, v, a, j)
 	begin
@@ -76,8 +75,8 @@ always @(reset, acc_step, load, set_v, set_a, set_j, v_val, a_val, j_val, v, a, 
 
 reg next_dir;
 reg next_step;
-reg [63:0] next_x;
-wire [63:0] x_acc;
+reg signed [63:0] next_x;
+wire signed [63:0] x_acc;
 
 assign x_acc = x + v;
 
@@ -107,7 +106,7 @@ always @(reset, load, set_x, x_val, x, v, step_bit)
 						else
 							next_dir <= 0;
 						next_step <= 1;
-					end;
+					end
 			end
 	end
 

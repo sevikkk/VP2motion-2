@@ -133,38 +133,37 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   // --USER nets declarations added here, as needed for user logic
 
   // Nets for user logic slave model s/w accessible register example
-  reg        [C_SLV_DWIDTH-1:0]           reg_cmd;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_xl;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_xh;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_v;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_a;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_j;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_dt;
-  reg        [C_SLV_DWIDTH-1:0]           reg_next_steps;
-  reg        [C_SLV_DWIDTH-1:0]           reg_pre_n;
-  reg        [C_SLV_DWIDTH-1:0]           reg_pulse_n;
-  reg        [C_SLV_DWIDTH-1:0]           reg_post_n;
-  reg        [C_SLV_DWIDTH-1:0]           reg_step_bit;
-  reg        [C_SLV_DWIDTH-1:0]           stat_xl;
-  reg        [C_SLV_DWIDTH-1:0]           stat_xh;
-  reg        [C_SLV_DWIDTH-1:0]           stat_v;
-  reg        [C_SLV_DWIDTH-1:0]           stat_a;
-  reg        [C_SLV_DWIDTH-1:0]           stat_j;
-  wire       [C_SLV_DWIDTH-1:0]           stat_dt;
-  wire       [C_SLV_DWIDTH-1:0]           stat_steps;
-  wire       [C_SLV_DWIDTH-1:0]           stat_status;
-  reg        [C_SLV_DWIDTH-1:0]           stat_emin_xl;
-  reg        [C_SLV_DWIDTH-1:0]           stat_emin_xh;
-  reg        [C_SLV_DWIDTH-1:0]           stat_emax_xl;
-  reg        [C_SLV_DWIDTH-1:0]           stat_emax_xh;
-  reg        [C_SLV_DWIDTH-1:0]           stat_eprobe_xl;
-  reg        [C_SLV_DWIDTH-1:0]           stat_eprobe_xh;
-  reg        [C_SLV_DWIDTH-1:0]           stat_missed_steps;
-  reg        [C_SLV_DWIDTH-1:0]           reg_stop_delay;
-  reg        [C_SLV_DWIDTH-1:0]           reg_probe_delay;
-  reg        [C_SLV_DWIDTH-1:0]           stat_min_bounce;
-  reg        [C_SLV_DWIDTH-1:0]           stat_max_bounce;
-  reg        [C_SLV_DWIDTH-1:0]           stat_probe_bounce;
+  reg        [C_SLV_DWIDTH-1:0]           reg_cmd;					//  0
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_xl;				//  1
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_xh;				//  2
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_v;				//  3
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_a;				//  4
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_j;				//  5
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_dt;				//  6
+  reg        [C_SLV_DWIDTH-1:0]           reg_next_steps;			//  7
+  reg        [C_SLV_DWIDTH-1:0]           reg_pre_n;				//  8
+  reg        [C_SLV_DWIDTH-1:0]           reg_pulse_n;				//  9
+  reg        [C_SLV_DWIDTH-1:0]           reg_post_n;				// 10
+  reg        [C_SLV_DWIDTH-1:0]           reg_step_bit;			// 11
+  wire       [63:0]								  stat_x;					// 12-13
+  wire       [C_SLV_DWIDTH-1:0]           stat_v;					// 14
+  wire       [C_SLV_DWIDTH-1:0]           stat_a;					// 15
+  wire       [C_SLV_DWIDTH-1:0]           stat_j;					// 16
+  wire       [C_SLV_DWIDTH-1:0]           stat_dt;					// 17
+  wire       [C_SLV_DWIDTH-1:0]           stat_steps;				// 18
+  wire       [C_SLV_DWIDTH-1:0]           stat_status;				// 19
+  reg        [C_SLV_DWIDTH-1:0]           stat_emin_xl;			// 20
+  reg        [C_SLV_DWIDTH-1:0]           stat_emin_xh;			// 21
+  reg        [C_SLV_DWIDTH-1:0]           stat_emax_xl;			// 22
+  reg        [C_SLV_DWIDTH-1:0]           stat_emax_xh;			// 23
+  reg        [C_SLV_DWIDTH-1:0]           stat_eprobe_xl;			// 24
+  reg        [C_SLV_DWIDTH-1:0]           stat_eprobe_xh;			// 25
+  reg        [C_SLV_DWIDTH-1:0]           stat_missed_steps;		// 26
+  reg        [C_SLV_DWIDTH-1:0]           reg_stop_delay;			// 27
+  reg        [C_SLV_DWIDTH-1:0]           reg_probe_delay;		// 28
+  reg        [C_SLV_DWIDTH-1:0]           stat_min_bounce;    	// 29
+  reg        [C_SLV_DWIDTH-1:0]           stat_max_bounce;    	// 30
+  reg        [C_SLV_DWIDTH-1:0]           stat_probe_bounce;  	// 31
   wire       [0 : 31]                       slv_reg_write_sel;
   wire       [0 : 31]                       slv_reg_read_sel;
   reg        [C_SLV_DWIDTH-1:0]           slv_ip2bus_data;
@@ -175,6 +174,9 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   wire                                      stopped;
   wire													load;
   wire													missed;
+  wire													step_dir;
+  wire													step_stb;
+  wire													acc_step_stb;
 
   // --USER logic implementation added here
 
@@ -414,7 +416,7 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
     end // SLAVE_REG_WRITE_PROC
 
   // implement slave model register read mux
-  always @( slv_reg_read_sel or reg_cmd or reg_next_xl or reg_next_xh or reg_next_v or reg_next_a or reg_next_j or reg_next_dt or reg_next_steps or reg_pre_n or reg_pulse_n or reg_post_n or reg_step_bit or stat_xl or stat_xh or stat_v or stat_a or stat_j or stat_dt or stat_steps or stat_status or stat_emin_xl or stat_emin_xh or stat_emax_xl or stat_emax_xh or stat_eprobe_xl or stat_eprobe_xh or stat_missed_steps or reg_stop_delay or reg_probe_delay or stat_min_bounce or stat_max_bounce or stat_probe_bounce )
+  always @( slv_reg_read_sel or reg_cmd or reg_next_xl or reg_next_xh or reg_next_v or reg_next_a or reg_next_j or reg_next_dt or reg_next_steps or reg_pre_n or reg_pulse_n or reg_post_n or reg_step_bit or stat_x or stat_v or stat_a or stat_j or stat_dt or stat_steps or stat_status or stat_emin_xl or stat_emin_xh or stat_emax_xl or stat_emax_xh or stat_eprobe_xl or stat_eprobe_xh or stat_missed_steps or reg_stop_delay or reg_probe_delay or stat_min_bounce or stat_max_bounce or stat_probe_bounce )
     begin: SLAVE_REG_READ_PROC
 
       case ( slv_reg_read_sel )
@@ -430,8 +432,8 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
         32'b00000000010000000000000000000000 : slv_ip2bus_data <= reg_pulse_n;
         32'b00000000001000000000000000000000 : slv_ip2bus_data <= reg_post_n;
         32'b00000000000100000000000000000000 : slv_ip2bus_data <= reg_step_bit;
-        32'b00000000000010000000000000000000 : slv_ip2bus_data <= stat_xl;
-        32'b00000000000001000000000000000000 : slv_ip2bus_data <= stat_xh;
+        32'b00000000000010000000000000000000 : slv_ip2bus_data <= stat_x[31:0];
+        32'b00000000000001000000000000000000 : slv_ip2bus_data <= stat_x[63:32];
         32'b00000000000000100000000000000000 : slv_ip2bus_data <= stat_v;
         32'b00000000000000010000000000000000 : slv_ip2bus_data <= stat_a;
         32'b00000000000000001000000000000000 : slv_ip2bus_data <= stat_j;
@@ -476,22 +478,45 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
     .steps(stat_steps), 
     .dt(stat_dt), 
     .stopped(stopped), 
-    .step_stb(step_stb), 
+    .step_stb(acc_step_stb), 
     .done(done)
     );
 
   assign stat_status[0] = stopped;
   assign stat_status[31:1] = 0;
   assign load = reg_cmd[0] && (done || stopped);
+  assign S_Enable = reg_step_bit[31];
+  
+  acc_profile_gen acc_profile_gen (
+    .clk(Bus2IP_Clk), 
+    .reset(Bus2IP_Reset),
+    .acc_step(acc_step_stb), 
+    .load(load), 
+    .set_x(reg_cmd[1]), 
+    .set_v(reg_cmd[2]), 
+    .set_a(reg_cmd[3]), 
+    .set_j(reg_cmd[4]), 
+    .x_val({reg_next_xh, reg_next_xl}), 
+    .v_val(reg_next_v), 
+    .a_val(reg_next_a), 
+    .j_val(reg_next_j), 
+    .step_bit(reg_step_bit[5:0]), 
+    .x(stat_x), 
+    .v(stat_v), 
+    .a(stat_a), 
+    .j(stat_j), 
+    .step(step_stb), 
+    .dir(step_dir)
+    );
   
 	motor_step_gen motor_step_gen (
     .clk(Bus2IP_Clk), 
     .reset(Bus2IP_Reset), 
-    .pre_n(10), 
-    .pulse_n(30), 
-    .post_n(40), 
+    .pre_n(reg_pre_n), 
+    .pulse_n(reg_pulse_n), 
+    .post_n(reg_post_n), 
     .step_stb(step_stb), 
-    .step_dir(1), 
+    .step_dir(step_dir), 
     .step(S_Step), 
     .dir(S_Dir), 
     .missed(missed)

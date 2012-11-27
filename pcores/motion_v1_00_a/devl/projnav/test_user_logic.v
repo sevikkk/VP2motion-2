@@ -76,6 +76,28 @@ module test_user_logic;
 		.IP2Bus_IntrEvent(IP2Bus_IntrEvent)
 	);
 
+task bus_write;
+	input [4:0] addr;
+	input [31:0] value;
+	begin
+		$display($time, "Write", addr, value);
+		Bus2IP_WrCE[addr] = 1;
+		Bus2IP_Data = value;
+		#10;
+		Bus2IP_WrCE = 0;
+	end
+endtask
+
+task bus_read;
+	input [4:0] addr;
+	begin
+		Bus2IP_RdCE[addr] = 1;
+		#10;
+		$display($time, "Read", addr, IP2Bus_Data);
+		Bus2IP_RdCE = 0;
+	end
+endtask
+
 	initial begin
 		// Initialize Inputs
 		E_Min = 0;
@@ -101,48 +123,27 @@ module test_user_logic;
 		Bus2IP_BE = 15;
 		
 		#30;
-		Bus2IP_WrCE = 32'b00000010000000000000000000000000;
-		Bus2IP_Data = 20;
-		#10;
-		Bus2IP_WrCE = 32'b00000000000000000000000000000000;
-		#30;
-		Bus2IP_WrCE = 32'b00000001000000000000000000000000;
-		Bus2IP_Data = 10;
-		#10;
-		Bus2IP_WrCE = 32'b00000000000000000000000000000000;
-		#30;
-		Bus2IP_WrCE = 32'b10000000000000000000000000000000;
-		Bus2IP_Data = 1;
-		#10;
-		Bus2IP_WrCE = 32'b00000000000000000000000000000000;
-		#300;
-		Bus2IP_WrCE = 32'b10000000000000000000000000000000;
-		Bus2IP_Data = 1;
-		#10;
-		Bus2IP_WrCE = 32'b00000000000000000000000000000000;
-		#30;
-		Bus2IP_RdCE = 32'b10000000000000000000000000000000;
-		#10;
-		Bus2IP_RdCE = 32'b00000000000000000000000000000000;
-		#30;
-		Bus2IP_RdCE = 32'b00000000000000000001000000000000;
-		#10;
-		Bus2IP_RdCE = 32'b00000000000000000000000000000000;
-		#300;
-		Bus2IP_RdCE = 32'b00000000000000000000000000100000;
-		Bus2IP_Data = 1;
-		#10;
-		Bus2IP_RdCE = 32'b00000000000000000000000000000000;
-		#300;
-		Bus2IP_WrCE = 32'b00000000000000000000000000100000;
-		Bus2IP_Data = 1;
-		#10;
-		Bus2IP_WrCE = 32'b00000000000000000000000000000000;
-		#300;
-		Bus2IP_RdCE = 32'b00000000000000000000000000100000;
-		Bus2IP_Data = 1;
-		#10;
-		Bus2IP_RdCE = 32'b00000000000000000000000000000000;
+		bus_write(8, 3);       // reg_pre_n
+		bus_write(9, 5);       // reg_pulse_n
+		bus_write(10, 8);      // reg_post_n
+		bus_write(11,
+			6+32'h80000000);    // reg_step_bit
+		
+		bus_write(1, 100);     // reg_next_xl
+		bus_write(2, 200);     // reg_next_xh
+		bus_write(3, 2);       // reg_next_v
+		bus_write(4, 2);       // reg_next_a
+		bus_write(5, 1);       // reg_next_j
+		bus_write(6, 20);      // reg_next_dt
+		bus_write(7, 10);      // reg_next_steps
+		bus_write(0, 1+4+8);  // reg_cmd
+		
+		#1000;
+		bus_write(4, -1);       // reg_next_a
+		bus_write(7, 30);      // reg_next_steps
+		bus_write(0, 1+8);      // reg_cmd
+
+		
 	end
       
 	initial begin
