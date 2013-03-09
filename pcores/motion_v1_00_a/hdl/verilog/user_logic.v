@@ -409,7 +409,7 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
           //         stat_probe_bounce[bit_index] <= Bus2IP_Data[bit_index];
           default : ;
         endcase
-        if ((slv_reg_write_sel != 32'b10000000000000000000000000000000) && (done || stopped))
+        if ((slv_reg_write_sel != 32'b10000000000000000000000000000000) && (reg_cmd[0]) && (done || stopped))
           reg_cmd <= 0;
        end
 
@@ -485,7 +485,7 @@ output     [0 : C_NUM_INTR-1]             IP2Bus_IntrEvent;
   assign stat_status[0] = stopped;
   assign stat_status[31:1] = 0;
   assign load = reg_cmd[0] && (done || stopped);
-  assign S_Enable = reg_step_bit[31];
+  assign S_Enable = ~reg_step_bit[31];
   
   acc_profile_gen acc_profile_gen (
     .clk(Bus2IP_Clk), 
