@@ -91,6 +91,7 @@ CORE_STATE_DEVELOPMENT_FILES = /opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcor
 /opt/Xilinx/10.1/EDK/hw/XilinxProcessorIPLib/pcores/interrupt_control_v2_00_a/hdl/vhdl/interrupt_control.vhd \
 /home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/motor_step_gen.v \
 /home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/acc_step_gen.v \
+/home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/acc_profile_gen.v \
 /home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/verilog/user_logic.v \
 /home/seva/src/xc2p_pe1/pcores/motion_v1_00_a/hdl/vhdl/motion.vhd
 
@@ -116,7 +117,12 @@ implementation/motion_y_wrapper.ngc \
 implementation/motion_z_wrapper.ngc \
 implementation/osram_load_inv_wrapper.ngc \
 implementation/osram_data_inv_wrapper.ngc \
-implementation/osram_clk_inv_wrapper.ngc
+implementation/osram_clk_inv_wrapper.ngc \
+implementation/xps_bram_if_cntlr_0_wrapper.ngc \
+implementation/bram_block_0_wrapper.ngc \
+implementation/xps_ethernetlite_0_wrapper.ngc \
+implementation/motion_a_wrapper.ngc \
+implementation/motion_b_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 
@@ -174,7 +180,7 @@ MEMTEST_OTHER_CC_FLAGS= $(MEMTEST_CC_GLOBPTR_FLAG)  \
 # SOFTWARE APPLICATION SDLOADER
 #################################################################
 
-SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c sdloader/src/cmdline.c 
+SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c sdloader/src/cmdline.c sdloader/src/motion.c 
 
 SDLOADER_HEADERS = 
 

@@ -6,6 +6,7 @@
 #include "xutil.h"
 #include "xstatus.h"
 #include "xuartlite_l.h"
+#include "motion.h"
 
 #include <sys/types.h>
 #include <inttypes.h>
@@ -25,6 +26,27 @@ const char osram_Boot[26] = {
 	0x85, 0x01, 0x76, 0x8a, 0x8c, 0x70,
 	0x05, 0x41, 0xe6, 0x42, 0x44, 0x30
 };
+
+void
+do_rd(void) {
+        uint32_t rc;
+        uint32_t val;
+        rc = cmdlineGetArgHex(1);
+
+        val = XIo_In32(rc);
+        printf("%08lX: %08X\r\n", rc, val);
+}
+
+void
+do_wr(void) {
+        uint32_t rc;
+        uint32_t val;
+        rc = cmdlineGetArgHex(1);
+        val = cmdlineGetArgHex(2);
+
+        XIo_Out32(rc, val);
+        printf("%08X <= %08X\r\n", rc, val);
+}
 
 char buf[MMC_BLOCK_SIZE];
 
@@ -140,11 +162,63 @@ int bootelf(void)
 	return 0;
 }
 
+void do_start(void)
+{
+	uint32_t val;
+
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
+	printf("CMD: %08lx\r\n", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_STATUS_OFFSET);
+	printf("STATUS: %08lx\r\n", val);
+	MOTION_SetDT(XPAR_MOTION_X_BASEADDR, 10000000); /* 100ms */
+	MOTION_SetSteps(XPAR_MOTION_X_BASEADDR, 100); /* 10 seconds */
+	MOTION_SetX(XPAR_MOTION_X_BASEADDR, (100L<<32) + 100);
+	MOTION_SetV(XPAR_MOTION_X_BASEADDR, 100);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
+	printf("CMD: %08lx\r\n", val);
+	MOTION_Start(XPAR_MOTION_X_BASEADDR); /* 10 seconds */
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
+	printf("CMD: %08lx\r\n", val);
+}
+
+void do_status(void)
+{
+	uint32_t val;
+
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
+	printf("CMD: %08lx\r\n", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_STATUS_OFFSET);
+	printf("STATUS: %08lx\r\n", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_DT_OFFSET);
+	printf("DT: %10ld    ", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_STEPS_OFFSET);
+	printf("STEPS: %7ld\r\n", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_XL_OFFSET);
+	printf("XL: %08lx\r\n", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_XH_OFFSET);
+	printf("X:  %10ld    ", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_V_OFFSET);
+	printf("V:  %10ld\r\n", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_A_OFFSET);
+	printf("A:  %10ld    ", val);
+	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_J_OFFSET);
+	printf("J:  %10ld\r\n", val);
+}
+
+
+void do_reset(void)
+{
+	MOTION_mReset(XPAR_MOTION_X_BASEADDR); /* 100ms */
+}
+
 void do_help(void)
 {
 	printf("Commands:\r\n"
-	       " help           - this help\r\n"
-	       " bootelf        - start boot.elf\r\n" "\r\n");
+	       " help            - this help\r\n"
+	       " rd <addr>       - memory read\r\n"
+	       " wr <addr> <val> - memory write\r\n"
+	       " bootelf         - start boot.elf\r\n"
+	       "\r\n");
 }
 
 void do_bootelf(void)
@@ -181,6 +255,11 @@ int main(void)
 	cmdlineAddCommand("help", do_help);
 	cmdlineAddCommand("?", do_help);
 	cmdlineAddCommand("bootelf", do_bootelf);
+	cmdlineAddCommand("rd", do_rd);
+	cmdlineAddCommand("wr", do_wr);
+	cmdlineAddCommand("start", do_start);
+	cmdlineAddCommand("status", do_status);
+	cmdlineAddCommand("reset", do_reset);
 
 	cmdlinePrintPrompt();
 	while (1) {
