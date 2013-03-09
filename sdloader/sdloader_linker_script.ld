@@ -18,7 +18,7 @@ _HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x8000;
 MEMORY
 {
    SDR_SDRAM_CUSTOM_C_MPMC_BASEADDR : ORIGIN = 0x00000000, LENGTH = 0x04000000
-   xps_bram_if_cntlr_1 : ORIGIN = 0xFFFE0000, LENGTH = 0x0001FFEC
+   xps_bram_if_cntlr_1 : ORIGIN = 0xFFFC0000, LENGTH = 0x0003FFEC
 }
 
 /* Specify the default entry point to the program */

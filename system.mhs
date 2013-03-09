@@ -35,9 +35,9 @@
  PORT SDRAM_DQ = SDRAM_DQ, DIR = IO, VEC = [31:0]
  PORT sys_clk_pin = dcm_clk_s, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  PORT sys_rst_pin = sys_rst_s, DIR = I, RST_POLARITY = 0, SIGIS = RST
- PORT PHY_tx_data = net_gnd, DIR = O, VEC = [3:0]
- PORT PHY_tx_en = net_gnd, DIR = O
- PORT PHY_rst_n = net_vcc, DIR = O
+ PORT PHY_tx_data = xps_ethernetlite_0_PHY_tx_data, DIR = O, VEC = [3:0]
+ PORT PHY_tx_en = xps_ethernetlite_0_PHY_tx_en, DIR = O
+ PORT PHY_rst_n = xps_ethernetlite_0_PHY_rst_n, DIR = O
  PORT PHY_rx_er = xps_ethernetlite_0_PHY_rx_er, DIR = I
  PORT PHY_col = xps_ethernetlite_0_PHY_col, DIR = I
  PORT PHY_rx_data = xps_ethernetlite_0_PHY_rx_data, DIR = I, VEC = [3:0]
@@ -68,13 +68,13 @@
  PORT Motor_Y_Dir = motion_y_S_Dir, DIR = O
  PORT Motor_Z_Step = motion_z_S_Step, DIR = O
  PORT Motor_Z_Dir = motion_z_S_Dir, DIR = O
- PORT Motor_XYZ_Enable = net_vcc, DIR = O
- PORT Motor_A_Enable = net_vcc, DIR = O
+ PORT Motor_XYZ_Enable = motion_x_S_Enable, DIR = O
+ PORT Motor_A_Enable = motion_a_S_Enable, DIR = O
  PORT Motor_X_Max = motion_x_X_Max, DIR = I
  PORT Motor_Y_Max = motion_y_X_Max, DIR = I
  PORT Motor_Z_Max = motion_z_X_Max, DIR = I
- PORT Motor_A_Dir = net_vcc, DIR = O
- PORT Motor_A_Step = net_vcc, DIR = O
+ PORT Motor_A_Dir = motion_a_S_Dir, DIR = O
+ PORT Motor_A_Step = motion_a_S_Step, DIR = O
 
 
 BEGIN ppc405
@@ -209,7 +209,7 @@ BEGIN xps_intc
  PARAMETER C_HIGHADDR = 0x8101ffff
  BUS_INTERFACE SPLB = plb0
  PORT Irq = EICC405EXTINPUTIRQ
- PORT Intr = xps_spi_sd_IP2INTC_Irpt&xps_spi_max_IP2INTC_Irpt&xps_spi_osram_IP2INTC_Irpt&RS232_Interrupt&RS485_Interrupt
+ PORT Intr = xps_spi_sd_IP2INTC_Irpt&xps_spi_max_IP2INTC_Irpt&xps_spi_osram_IP2INTC_Irpt&motion_x_IP2INTC_Irpt&motion_y_IP2INTC_Irpt&motion_z_IP2INTC_Irpt&motion_a_IP2INTC_Irpt&motion_b_IP2INTC_Irpt&xps_ethernetlite_0_IP2INTC_Irpt&RS232_Interrupt&RS485_Interrupt
 END
 
 BEGIN xps_uartlite
@@ -305,6 +305,8 @@ BEGIN motion
  PORT S_Step = motion_x_S_Step
  PORT S_Dir = motion_x_S_Dir
  PORT E_Max = motion_x_X_Max
+ PORT IP2INTC_Irpt = motion_x_IP2INTC_Irpt
+ PORT S_Enable = motion_x_S_Enable
 END
 
 BEGIN motion
@@ -318,6 +320,7 @@ BEGIN motion
  PORT S_Step = motion_y_S_Step
  PORT S_Dir = motion_y_S_Dir
  PORT E_Max = motion_y_X_Max
+ PORT IP2INTC_Irpt = motion_y_IP2INTC_Irpt
 END
 
 BEGIN motion
@@ -331,6 +334,7 @@ BEGIN motion
  PORT S_Step = motion_z_S_Step
  PORT S_Dir = motion_z_S_Dir
  PORT E_Max = motion_z_X_Max
+ PORT IP2INTC_Irpt = motion_z_IP2INTC_Irpt
 END
 
 BEGIN util_vector_logic
@@ -361,5 +365,67 @@ BEGIN util_vector_logic
  PORT Op1 = xps_spi_osram_SCK_O
  PORT Op2 = net_vcc
  PORT Res = osram_clk_inv_Res
+END
+
+BEGIN xps_bram_if_cntlr
+ PARAMETER INSTANCE = xps_bram_if_cntlr_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0xFFFC0000
+ PARAMETER C_HIGHADDR = 0xFFFDFFFF
+ PARAMETER C_SPLB_NATIVE_DWIDTH = 64
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_0_PORTA
+ BUS_INTERFACE SPLB = plb0
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = bram_block_0
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_0_PORTA
+END
+
+BEGIN xps_ethernetlite
+ PARAMETER INSTANCE = xps_ethernetlite_0
+ PARAMETER HW_VER = 2.00.b
+ PARAMETER C_BASEADDR = 0x81080000
+ PARAMETER C_HIGHADDR = 0x8108FFFF
+ BUS_INTERFACE SPLB = plb0
+ PORT PHY_tx_data = xps_ethernetlite_0_PHY_tx_data
+ PORT PHY_tx_en = xps_ethernetlite_0_PHY_tx_en
+ PORT PHY_rst_n = xps_ethernetlite_0_PHY_rst_n
+ PORT PHY_rx_er = xps_ethernetlite_0_PHY_rx_er
+ PORT PHY_col = xps_ethernetlite_0_PHY_col
+ PORT PHY_rx_data = xps_ethernetlite_0_PHY_rx_data
+ PORT PHY_dv = xps_ethernetlite_0_PHY_dv
+ PORT PHY_crs = xps_ethernetlite_0_PHY_crs
+ PORT PHY_rx_clk = xps_ethernetlite_0_PHY_rx_clk
+ PORT PHY_tx_clk = xps_ethernetlite_0_PHY_tx_clk
+ PORT IP2INTC_Irpt = xps_ethernetlite_0_IP2INTC_Irpt
+END
+
+BEGIN motion
+ PARAMETER INSTANCE = motion_a
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_MEM0_BASEADDR = 0x82070000
+ PARAMETER C_MEM0_HIGHADDR = 0x8207FFFF
+ PARAMETER C_BASEADDR = 0x82060000
+ PARAMETER C_HIGHADDR = 0x8206FFFF
+ BUS_INTERFACE SPLB = plb0
+ PORT S_Step = motion_a_S_Step
+ PORT S_Dir = motion_a_S_Dir
+ PORT S_Enable = motion_a_S_Enable
+ PORT IP2INTC_Irpt = motion_a_IP2INTC_Irpt
+END
+
+BEGIN motion
+ PARAMETER INSTANCE = motion_b
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_MEM0_BASEADDR = 0x82090000
+ PARAMETER C_MEM0_HIGHADDR = 0x8209FFFF
+ PARAMETER C_BASEADDR = 0x82080000
+ PARAMETER C_HIGHADDR = 0x8208FFFF
+ BUS_INTERFACE SPLB = plb0
+ PORT S_Step = motion_b_S_Step
+ PORT S_Dir = motion_b_S_Dir
+ PORT IP2INTC_Irpt = motion_b_IP2INTC_Irpt
 END
 
