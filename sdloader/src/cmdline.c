@@ -354,17 +354,22 @@ void cmdlineDoHistory(uint8_t action)
 	case CMDLINE_HISTORY_SAVE:
 
 		// copy CmdlineBuffer to history if not null string
-		if (strlen(CmdlineBuffer) && CmdlineHistoryCopy) {
+		if (strlen(CmdlineBuffer)) {
 			int i;
-			if (CmdlineHistoryCnt >= CMDLINE_HISTORYSIZE)
-				CmdlineHistoryCnt = CMDLINE_HISTORYSIZE - 1;
+			if (CmdlineHistoryCopy) {
+				if (CmdlineHistoryCnt >= CMDLINE_HISTORYSIZE)
+					CmdlineHistoryCnt = CMDLINE_HISTORYSIZE - 1;
+				i = CmdlineHistoryCnt;
+				CmdlineHistoryCnt++;
+			} else {
+				i = CmdlineHistoryIdx;
+			};
 
-			for (i = CmdlineHistoryCnt; i > 0; i--) {
+			for (; i > 0; i--) {
 				strcpy(CmdlineHistory[i],
 				       CmdlineHistory[i - 1]);
 			};
 			strcpy(CmdlineHistory[0], CmdlineBuffer);
-			CmdlineHistoryCnt++;
 		};
 		break;
 	case CMDLINE_HISTORY_NEXT:
@@ -530,5 +535,5 @@ long cmdlineGetArgInt(uint8_t argnum)
 long cmdlineGetArgHex(uint8_t argnum)
 {
 	char *endptr;
-	return strtol(cmdlineGetArgStr(argnum), &endptr, 16);
+	return strtoul(cmdlineGetArgStr(argnum), &endptr, 16);
 }
