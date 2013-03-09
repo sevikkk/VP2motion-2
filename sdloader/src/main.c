@@ -18,6 +18,7 @@
 #include "elf.h"
 #define printf xil_printf
 #include "cmdline.h"
+#include "steppers.h"
 
 const char osram_Boot[26] = {
 	0x03, 0x0f,
@@ -164,56 +165,26 @@ int bootelf(void)
 
 void do_start(void)
 {
-	uint32_t val;
+	int32_t x, v, dt;
+	struct steppers_target tgt;
 
-	MOTION_mWriteReg(XPAR_MOTION_X_BASEADDR, MOTION_PRE_N_OFFSET,100000);
-	MOTION_mWriteReg(XPAR_MOTION_X_BASEADDR, MOTION_PULSE_N_OFFSET,300000);
-	MOTION_mWriteReg(XPAR_MOTION_X_BASEADDR, MOTION_POST_N_OFFSET,100000);
-	MOTION_mWriteReg(XPAR_MOTION_X_BASEADDR, MOTION_STEP_BIT_OFFSET,(1<<31) | 15);
-
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
-	printf("CMD: %08lx\r\n", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_STATUS_OFFSET);
-	printf("STATUS: %08lx\r\n", val);
-	MOTION_SetDT(XPAR_MOTION_X_BASEADDR, 10000000); /* 100ms */
-	MOTION_SetSteps(XPAR_MOTION_X_BASEADDR, 100); /* 10 seconds */
-	MOTION_SetX(XPAR_MOTION_X_BASEADDR, (100LL<<32) + 100);
-	MOTION_SetV(XPAR_MOTION_X_BASEADDR, 1000);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
-	printf("CMD: %08lx\r\n", val);
-	MOTION_Start(XPAR_MOTION_X_BASEADDR); /* 10 seconds */
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
-	printf("CMD: %08lx\r\n", val);
+	x = cmdlineGetArgInt(1);
+	v = cmdlineGetArgInt(2);
+	dt = cmdlineGetArgInt(3);
+	tgt.x[0] = (double)x;
+	tgt.v[0] = (double)v;
+	tgt.dt = (double)dt/1000.0;
+	steppersQueue(tgt);
 }
 
 void do_status(void)
 {
-	uint32_t val;
-
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_CMD_OFFSET);
-	printf("CMD: %08lx\r\n", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_STATUS_OFFSET);
-	printf("STATUS: %08lx\r\n", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_DT_OFFSET);
-	printf("DT: %10ld    ", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_STEPS_OFFSET);
-	printf("STEPS: %7ld\r\n", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_XL_OFFSET);
-	printf("XL: %08lx\r\n", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_XH_OFFSET);
-	printf("X:  %10ld    ", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_V_OFFSET);
-	printf("V:  %10ld\r\n", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_A_OFFSET);
-	printf("A:  %10ld    ", val);
-	val = MOTION_mReadReg(XPAR_MOTION_X_BASEADDR, MOTION_STAT_J_OFFSET);
-	printf("J:  %10ld\r\n", val);
+	steppersStatus();
 }
-
 
 void do_reset(void)
 {
-	MOTION_mReset(XPAR_MOTION_X_BASEADDR); /* 100ms */
+	steppersReset();
 }
 
 void do_help(void)
@@ -274,6 +245,7 @@ int main(void)
 					  XUL_RX_FIFO_OFFSET));
 		};
 		cmdlineMainLoop();
+		steppersMainLoop();
 	};
 
 	return 0;

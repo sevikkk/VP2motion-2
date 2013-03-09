@@ -180,7 +180,7 @@ MEMTEST_OTHER_CC_FLAGS= $(MEMTEST_CC_GLOBPTR_FLAG)  \
 # SOFTWARE APPLICATION SDLOADER
 #################################################################
 
-SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c sdloader/src/cmdline.c sdloader/src/motion.c 
+SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c sdloader/src/cmdline.c sdloader/src/motion.c sdloader/src/steppers.c 
 
 SDLOADER_HEADERS = 
 

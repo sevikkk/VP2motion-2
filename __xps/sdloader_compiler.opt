@@ -1,5 +1,5 @@
 ppc405_0
-SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c sdloader/src/cmdline.c sdloader/src/motion.c 
+SDLOADER_SOURCES = sdloader/src/main.c sdloader/src/mmc.c sdloader/src/osram.c sdloader/src/diskio.c sdloader/src/ff.c sdloader/src/unicode.c sdloader/src/cmdline.c sdloader/src/motion.c sdloader/src/steppers.c 
 SDLOADER_HEADERS = 
 SDLOADER_CC = powerpc-eabi-gcc
 SDLOADER_CC_SIZE = powerpc-eabi-size

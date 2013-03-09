@@ -80,6 +80,7 @@ Source: sdloader/src/ff.c
 Source: sdloader/src/unicode.c
 Source: sdloader/src/cmdline.c
 Source: sdloader/src/motion.c
+Source: sdloader/src/steppers.c
 DefaultInit: executable
 InitBram: 1
 Active: 1
