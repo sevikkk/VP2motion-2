@@ -8,7 +8,7 @@ Net sys_clk_pin LOC=E17;
 Net sys_rst_pin LOC=H17;
 ## System level constraints
 Net sys_clk_pin TNM_NET = sys_clk_pin;
-TIMESPEC TS_sys_clk_pin = PERIOD sys_clk_pin 10000 ps;
+TIMESPEC TS_sys_clk_pin = PERIOD sys_clk_pin 9000 ps;
 Net sys_rst_pin TIG;
 NET "ppc_reset_bus_Chip_Reset_Req" TPTHRU = "RST_GRP";
 NET "ppc_reset_bus_Core_Reset_Req" TPTHRU = "RST_GRP";
