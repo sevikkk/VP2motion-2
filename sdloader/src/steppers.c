@@ -36,16 +36,18 @@ void unqueue_move(void) {
 	int i;
 	struct steppers_target next_position = queue[0];
 	char buf[500];
+	int32_t int_a[STEPPERS_NUM_AXES];
+	int32_t int_j[STEPPERS_NUM_AXES];
 
 	for (i = 0; i < queue_len - 1; i++) {
 		queue[i] = queue[i+1];
 	};
 	queue_len--;
+	dt = next_position.dt;
 
 	dx = next_position.x[0] - current_position.x[0];
 	v0 = current_position.v[0];
 	vn = next_position.v[0];
-	dt = next_position.dt;
 
 	kb = 3 * dx / (dt * dt) - (2 * v0 + vn) / dt;
 	ka = (vn - v0) / (3.0 * (dt * dt)) - (2.0 * kb) / (3.0 * dt);
